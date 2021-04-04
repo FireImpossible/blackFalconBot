@@ -30,7 +30,7 @@ async def ping(ctx):
     await ctx.reply("pong!")
 
 # gets comp dates
-@client.command(aliases=['comps', 'comp'])
+@client.command(aliases=['comp'])
 async def comps(ctx, *args):
 
     if not args:
