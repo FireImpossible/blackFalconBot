@@ -81,7 +81,7 @@ async def ping(ctx):
     embed = discord.Embed(
         title = "Ping",
         description = "Sends back a pong. The first command that this bot did. " + 
-                      "It is very important, and will not be deleted."
+                      "\nIt is very important, and will not be deleted."
     )
     embed.add_field(name="**Syntax**", value="bf!ping")
     await ctx.send(embed=embed)
