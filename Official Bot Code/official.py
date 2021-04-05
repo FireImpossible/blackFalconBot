@@ -22,27 +22,27 @@ def clearEmpty(array): #clears the empty or strings with "" inside of the array 
     stringArray = [] #sets up the string array that will be compared to the original array so that repeats will not be counted again
     for x in range(len(array)):
         if array[x].get_text() != "": #test if not empty
-            if array[x].get_text() not in stringArray: #test if the string isn't already in stringArray
+            if array[x].get_text() not in stringArray: #test if the string isn't already in stringArray. no repeats allowed.
                 stringArray.append(array[x].get_text())
                 fixedArray.append(array[x])
     return fixedArray
 def getEvents(Events): #the real juicy part
-    eventObj = []
+    eventObj = [] #sets up the eventObj array to hold the finished eventss
     for x in range(len(Events)):
         #print(Events[x].find("strong").get_text())
-        if(len(clearEmpty(Events[x].find_all("strong"))) > 0):
-            event = clearEmpty(Events[x].find_all("strong"))[0].get_text()
-            eventObj.append(fixText(event))
-            dateBold = clearEmpty(Events[x].find_all("b"))
-            dateStrong = clearEmpty(Events[x].find_all("strong"))
-            if(len(dateStrong) < 2):
-                if(dateBold):
-                    eventObj.append(dateBold[0].get_text())
+        if(len(clearEmpty(Events[x].find_all("strong"))) > 0): #the array should have more than one item, otherwise it doesn't exist and the program will skip it
+            event = clearEmpty(Events[x].find_all("strong"))[0].get_text() #gets the event name, because a row will have for example ["Exhibition Round I", "August 7-9, 2020"]
+            eventObj.append(fixText(event)) #puts the fixed event name into the eventObj
+            dateBold = clearEmpty(Events[x].find_all("b")) #gets values in text elements such as <b>, because cyberpatriot website is wack and one value is in <b> instead of <strong>
+            dateStrong = clearEmpty(Events[x].find_all("strong")) #gets all values in text elements of <strong>, will be using it for date, because after the array is cleaned up the date will be the second value
+            if(len(dateStrong) < 2): #if for some reason the values in dateStrong is only ["Exhibition Round I"] and doesn't include the date
+                if(dateBold): #if dateBold does exist, then we shall use it instead
+                    eventObj.append(dateBold[0].get_text()) #puts the first dateBold value into the array
                 else:
                     eventObj.append("not found")
             else:
                 #print(dateStrong[1].get_text())
-                eventObj.append(dateStrong[1].get_text())
+                eventObj.append(dateStrong[1].get_text())#puts the second value of dateStrong into the array
     return eventObj
 
 # bot starts
