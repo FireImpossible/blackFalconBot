@@ -113,7 +113,7 @@ async def ping(ctx):
 
 @client.command()
 async def yeehaw(ctx):
-    await ctx.reply("cowbois :cowboy:")
+    await ctx.reply("cowbois \🤠")
 
 # gets comp dates
 @client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
