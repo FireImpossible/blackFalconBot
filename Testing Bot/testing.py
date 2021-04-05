@@ -19,37 +19,50 @@ def fixText(text):
     return text
 def clearEmpty(array):
     fixedArray = []
-    stringArray = []
+    #stringArray = []
     for x in range(len(array)):
         if array[x].get_text() != "":
-            if array[x].get_text() not in stringArray:
-                stringArray.append(array[x].get_text())
-                fixedArray.append(array[x])
+            if array[x].get_text() not in fixedArray:
+                #stringArray.append(array[x].get_text())
+                fixedArray.append(array[x].get_text())
     return fixedArray
 def getEvents(Events):
     eventObj = []
     for x in range(len(Events)):
         #print(Events[x].find("strong").get_text())
         if(len(clearEmpty(Events[x].find_all("strong"))) > 0):
-            event = clearEmpty(Events[x].find_all("strong"))[0].get_text()
+            event = clearEmpty(Events[x].find_all("strong"))[0]
             eventObj.append(fixText(event))
             dateBold = clearEmpty(Events[x].find_all("b"))
             dateStrong = clearEmpty(Events[x].find_all("strong"))
             if(len(dateStrong) < 2):
                 if(dateBold):
-                    eventObj.append(dateBold[0].get_text())
+                    eventObj.append(dateBold[0])
                 else:
                     eventObj.append("not found")
             else:
                 #print(dateStrong[1].get_text())
-                eventObj.append(dateStrong[1].get_text())
+                eventObj.append(dateStrong[1])
     return eventObj
 
 # bot starts
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-    await client.get_channel(828314284441337889).send('I am alive')
+    
+    #thien's thing:
+    for guild in client.guilds:
+        print(guild.name)
+        text_channel_list = []
+        channelname = []
+        for channel in guild.channels: #getting all channels in the servers
+            print(str(channel.name) + "type: " + str(channel.type)) 
+            if str(channel.type).lower() == 'text': #if it's a text channel
+                text_channel_list.append(channel) #gets actual channel
+                channelname.append(channel.name) #gets channel name
+                print(channel.name)
+        print(text_channel_list)
+        await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send('Your Best BF is Online') #we've connected to DISCORD!!!!
 
 # im keeping this
 @client.command()
