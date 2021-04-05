@@ -49,47 +49,49 @@ def getEvents(Events): #the real juicy part
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-    await client.get_channel(828314284441337889).send('I am alive')
+    await client.get_channel(828314284441337889).send('I am alive') #we've connected to DISCORD!!!!
 
 # im keeping this
-@client.command()
-async def ping(ctx):
-    await ctx.reply("pong!")
+@client.command() #the command async functions work like this, async def ping(ctx, *args) would be the command bf!ping on the server with arguments, however, ping doesn't have extra arguments
+async def ping(ctx): 
+    await ctx.reply("pong!") #always gotta keep the pong
 
 # gets comp dates
 @client.command(aliases=['comp'])
-async def comps(ctx, *args):
-    # remake the soup
+async def comps(ctx, *args): #arguments work like page 1 or page 2, bf!comps 1 or bf!comps 2S
+    # remake the soup, just gets the website
     url = "https://www.uscyberpatriot.org/competition/current-competition/competition-schedule"
     page = urlopen(url)
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
-    tablebody = soup.find_all("tbody")
+    tablebody = soup.find_all("tbody")#gets all table elements inside of the website, basically the trainingrounds and competitive rounds
 
     # get args length
     if not args:
         page_num = 1
     else:
-        if int(args[0]) > 2 or int(args[0]) < 1:
+        if int(args[0]) > 2 or int(args[0]) < 1: #basically if the value is one or less, then it's just page 1, if it's bigger than one, then it's the value they put in.
             page_num = 1
         else:
             page_num = int(args[0])
 
-    # make the embed
+    # make the embed or basically what the bot displays
     competition_embed = discord.Embed(
         title=f"Competition Dates:"
     )
-    competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
-    competition_embed.set_footer(text=f"Viewing page {page_num} of 2.")
+    competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png") #puts in the picture
+    competition_embed.set_footer(text=f"Viewing page {page_num} of 2.") #puts in the page number
 
     # flavor the soup
     if page_num == 1: # page 1
-        trainEvents = tablebody[0].find_all("tr")
-        eventObj = getEvents(trainEvents)
+        trainEvents = tablebody[0].find_all("tr") #table one is the training events
+        eventObj = getEvents(trainEvents) #puts the values into the array
+        #the next two lines of code bassically skips the first value of the table which says ["EVENTS", "DATES] for the actual stuff
+        #it then gets every two values ["Exhibition Round I", "some date", "Training Round I", "some date"], so it would get 0 and 1, then 1 and 2, and put it onto the message
         for x in range(1, int(len(eventObj)/2)):
-            competition_embed.add_field(name=eventObj[x * 2], value=eventObj[(x * 2) + 1], inline=False)
+            competition_embed.add_field(name=eventObj[x * 2], value=eventObj[(x * 2) + 1], inline=False) 
     else: # page 2
-        roundEvents = tablebody[1].find_all("tr")
+        roundEvents = tablebody[1].find_all("tr") #table two on the website is competitive rounds
         eventObj = getEvents(roundEvents)
         for x in range(int(len(eventObj)/2)):
             competition_embed.add_field(name=eventObj[x * 2], value=eventObj[(x * 2) + 1], inline=False)
