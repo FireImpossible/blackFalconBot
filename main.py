@@ -9,7 +9,7 @@ import requests
 import time
 from soup_functions import * #look i can write tho
 
-TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
 
