@@ -122,6 +122,7 @@ async def cisco(ctx, *args):
         ##for every <strong> tag that's found
         if strong:
             key = strong.get_text()
+            mod_dict[key] = ''
             test_string += '\n' + str(key) #testing 
 
             ## search trs until next td with strong + round is found
@@ -134,12 +135,21 @@ async def cisco(ctx, *args):
                 module = tablebody[trMod].find(lambda tag: tag.name=='td' and "Module" in tag.text)
                 ##search until the text in the tr tag has the text "module"
                 if module:
+                    mod_dict[key] += '\n' +  str(module.get_text())
                     test_string += '\n' +  str(module.get_text())
                     ##add to dictionary
                 trMod+=1
                 next_strong = tablebody[trMod].find(lambda tag: tag.name=='td' and "Round" in tag.text) #recursion potential
+            
 
-    
+    ##for each key in dict... make an embed
+    cisco_embed = discord.Embed(
+        title=f"cisco mods <3:"
+    )
+    for key in mod_dict.keys():
+        cisco_embed.add_field(name=key, value=mod_dict[key], inline=False)
+
+
     ##add it to a dictionary for that round
     #['roundName'] = the mod text
 
@@ -154,6 +164,6 @@ async def cisco(ctx, *args):
     ##if table data has "modules", add table data to the embed
     ##get round + date somehow...?
 
-    await ctx.send(test_string)
+    await ctx.send(embed=cisco_embed)
 
 client.run(TOKEN)
