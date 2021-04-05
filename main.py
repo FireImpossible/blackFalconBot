@@ -110,13 +110,43 @@ async def cisco(ctx, *args):
     page = urlopen(url)
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
-    tablebody = soup.find_all("tbody")[1].find_all("strong")
+    tablebody = soup.find_all("tbody")[1].find_all("tr")
 
+    ##set up some dictionary
+    mod_dict = {}
+    test_string = ''
+    for trCount in range(0, len(tablebody)):
+        
+        strong = tablebody[trCount].find(lambda tag: tag.name=='td' and "Round" in tag.text)
+        
+        ##for every <strong> tag that's found
+        if strong:
+            key = strong.get_text()
+            test_string += '\n' + str(key) #testing 
+
+            ## search trs until next td with strong + round is found
+            trMod = trCount + 1
+            next_strong = tablebody[trMod].find(lambda tag: tag.name=='td' and "Round" in tag.text)
+            
+            while not next_strong and trMod < len(tablebody)-1:
+            #for trMod in range(trCount + 1, len(tablebody)):
+
+                module = tablebody[trMod].find(lambda tag: tag.name=='td' and "Module" in tag.text)
+                ##search until the text in the tr tag has the text "module"
+                if module:
+                    test_string += '\n' +  str(module.get_text())
+                    ##add to dictionary
+                trMod+=1
+                next_strong = tablebody[trMod].find(lambda tag: tag.name=='td' and "Round" in tag.text) #recursion potential
+
+    
+    ##add it to a dictionary for that round
+    #['roundName'] = the mod text
 
     #tablebody = soup.find(lambda tag: tag.name=='tbody')[1] 
 
-    trainEvents = tablebody.find_all("tr")
-    eventObj = getEvents(trainEvents)
+    #trainEvents = tablebody.find_all("tr")
+    #eventObj = getEvents(trainEvents)
 
     ##or maybe first get bold, search until find modules, return + add to embed
 
@@ -124,6 +154,6 @@ async def cisco(ctx, *args):
     ##if table data has "modules", add table data to the embed
     ##get round + date somehow...?
 
-    await ctx.send(tablebody)
+    await ctx.send(test_string)
 
 client.run(TOKEN)
