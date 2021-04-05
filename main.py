@@ -5,13 +5,13 @@ from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 import grequests
-import requests
+import requests 
 import time
+from soup_functions import * #look i can write tho
 
-TOKEN = 'ODI4NDQ0NjMyOTg3MDc0NTgw.YGprMA.UexRcmepOOQo4672UXRXtMQ4BDE'
-intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True) ###turn on all intents in the bot dashboard
-
-client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!', 'bffsie!'], intents=intents)
+TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
+intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
+client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
 
 # for the soup
 def fixText(text):
@@ -20,37 +20,100 @@ def fixText(text):
     return text
 def clearEmpty(array):
     fixedArray = []
-    stringArray = []
+    #stringArray = []
     for x in range(len(array)):
         if array[x].get_text() != "":
-            if array[x].get_text() not in stringArray:
-                stringArray.append(array[x].get_text())
-                fixedArray.append(array[x])
+            if array[x].get_text() not in fixedArray:
+                #stringArray.append(array[x].get_text())
+                fixedArray.append(array[x].get_text())
     return fixedArray
 def getEvents(Events):
     eventObj = []
     for x in range(len(Events)):
         #print(Events[x].find("strong").get_text())
         if(len(clearEmpty(Events[x].find_all("strong"))) > 0):
-            event = clearEmpty(Events[x].find_all("strong"))[0].get_text()
+            event = clearEmpty(Events[x].find_all("strong"))[0]
             eventObj.append(fixText(event))
-            dateB = clearEmpty(Events[x].find_all("b"))
+            dateBold = clearEmpty(Events[x].find_all("b"))
             dateStrong = clearEmpty(Events[x].find_all("strong"))
             if(len(dateStrong) < 2):
-                if(dateB):
-                    eventObj.append(dateB[0].get_text())
+                if(dateBold):
+                    eventObj.append(dateBold[0])
                 else:
                     eventObj.append("not found")
             else:
                 #print(dateStrong[1].get_text())
-                eventObj.append(dateStrong[1].get_text())
+                eventObj.append(dateStrong[1])
     return eventObj
 
 # bot starts
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-    await client.get_channel(736733844958478389).send('hopping in!')
+    
+    #thien's thing:
+    for guild in client.guilds:
+        print(guild.name)
+        text_channel_list = []
+        channelname = []
+        for channel in guild.channels: #getting all channels in the servers
+            print(str(channel.name) + " type: " + str(channel.type)) 
+            if str(channel.type).lower() == 'text': #if it's a text channel
+                text_channel_list.append(channel) #gets actual channel
+                channelname.append(channel.name) #gets channel name
+                print(channel.name)
+        print(text_channel_list)
+        await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send('Your Best BF is Online') #we've connected to DISCORD!!!!
+
+# help command stuff
+client.remove_command("help")
+@client.group(invoke_without_command=True)
+async def help(ctx):
+    embed = discord.Embed(
+        title = "Help",
+        description = "Use bf!help <command> for more information for each command"
+    )
+    embed.add_field(name="**ping**", value="pong :)")
+    embed.add_field(name="**comp**", value="competition dates")
+    embed.add_field(name="**cisco**", value="PT modules")
+    embed.add_field(name="**yeehaw**", value="cowboy")
+    
+    await ctx.send(embed=embed)
+@help.command()
+async def ping(ctx):
+    embed = discord.Embed(
+        title = "Ping",
+        description = "Sends back a pong. The first command that this bot did. " + 
+                      "\nIt is very important, and will not be deleted."
+    )
+    embed.add_field(name="**Syntax**", value="bf!ping")
+    await ctx.send(embed=embed)
+@help.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
+async def comps(ctx):
+    embed = discord.Embed(
+        title = "Competition Dates",
+        description = "Gets all of the training and competition rounds and dates from the CyberPatriot website and displays them."
+    )
+    embed.add_field(name="**Syntax**", value="bf!comp <page #>")
+    embed.add_field(name="**Aliases**", value="comp, comps, dates, date, comp_dates, competition, competition_dates")
+    await ctx.send(embed=embed)
+@help.command(aliases=['pt', 'packet_tracer', 'mods', 'h*ll'])
+async def cisco(ctx):
+    embed = discord.Embed(
+        title = "Cisco",
+        description = "Says all of the packet tracer modules that is covered for each round."
+    )
+    embed.add_field(name="**Syntax**", value="bf!cisco")
+    embed.add_field(name="**Aliases**", value="cisco, pt, packet_tracer, mods, h*ll")
+    await ctx.send(embed=embed)
+@help.command()
+async def yeehaw(ctx):
+    embed = discord.Embed(
+        name = "Yeehaw",
+        description = "Cowboy \:abelpog:"
+    )
+    embed.add_field(name="**Syntax**", value="bf!yeehaw")
+    await ctx.send(embed=embed)
 
 # im keeping this
 @client.command()
@@ -59,12 +122,12 @@ async def ping(ctx):
 
 @client.command()
 async def yeehaw(ctx):
-    await ctx.reply("cowboys!")
+    await ctx.reply("cowbois \🤠")
 
 # gets comp dates
-@client.command(aliases=['comp', 'dates', 'date', 'comp dates', 'competition', 'competition dates'])
+@client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
 async def comps(ctx, *args):
-    # remake the soup, set up for url
+    # remake the soup
     url = "https://www.uscyberpatriot.org/competition/current-competition/competition-schedule"
     page = urlopen(url)
     html = page.read().decode("utf-8")
@@ -102,7 +165,7 @@ async def comps(ctx, *args):
     # send the soup
     await ctx.send(embed=competition_embed)
 
-@client.command(aliases=['pt', 'packet tracer', 'mods', 'h*ll'])
+@client.command(aliases=['pt', 'packet_tracer', 'mods', 'h*ll'])
 async def cisco(ctx, *args):
 
     #stolen
@@ -110,20 +173,45 @@ async def cisco(ctx, *args):
     page = urlopen(url)
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
-    tablebody = soup.find_all("tbody")[1].find_all("strong")
+    tablebody = soup.find_all("tbody")[1].find_all("tr")
 
+    ##set up some dictionary
+    mod_dict = {}
+    test_string = ''
+    for trCount in range(0, len(tablebody)):
+        
+        strong = tablebody[trCount].find(lambda tag: tag.name=='td' and "Round" in tag.text)
+        
+        ##for every <strong> tag that's found
+        if strong:
+            key = strong.get_text()
+            mod_dict[key] = ''
+            test_string += '\n' + str(key) #testing 
 
-    #tablebody = soup.find(lambda tag: tag.name=='tbody')[1] 
+            ## search trs until next td with strong + round is found
+            trMod = trCount + 1
+            next_strong = tablebody[trMod].find(lambda tag: tag.name=='td' and "Round" in tag.text)
+            
+            while not next_strong and trMod < len(tablebody)-1:
+            #for trMod in range(trCount + 1, len(tablebody)):
 
-    trainEvents = tablebody.find_all("tr")
-    eventObj = getEvents(trainEvents)
+                module = tablebody[trMod].find(lambda tag: tag.name=='td' and "Module" in tag.text)
+                ##search until the text in the tr tag has the text "module"
+                if module:
+                    mod_dict[key] += '\n' +  str(module.get_text())
+                    test_string += '\n' +  str(module.get_text())
+                    ##add to dictionary
+                trMod+=1
+                next_strong = tablebody[trMod].find(lambda tag: tag.name=='td' and "Round" in tag.text) #recursion potential
+    
+    ##for each key in dict... make an embed
+    cisco_embed = discord.Embed(
+        title=f"cisco mods <3:"
+    )
+    cisco_embed.set_thumbnail(url="https://www.saashub.com/images/app/service_logos/51/4ef1468caaa3/large.png?1558762812")
+    for key in mod_dict.keys():
+        cisco_embed.add_field(name=key, value=mod_dict[key], inline=False)
 
-    ##or maybe first get bold, search until find modules, return + add to embed
-
-    ##future... search by round
-    ##if table data has "modules", add table data to the embed
-    ##get round + date somehow...?
-
-    await ctx.send(tablebody)
+    await ctx.send(embed=cisco_embed)
 
 client.run(TOKEN)
