@@ -111,6 +111,10 @@ async def cisco(ctx):
 async def ping(ctx):
     await ctx.reply("pong!")
 
+@client.command()
+async def yeehaw(ctx):
+    await ctx.reply("cowbois :cowboy:")
+
 # gets comp dates
 @client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
 async def comps(ctx, *args):
