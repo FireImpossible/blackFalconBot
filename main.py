@@ -73,10 +73,10 @@ async def help(ctx):
         title = "Help",
         description = "Use bf!help <command> for more information for each command"
     )
-    embed.add_field(name="ping", value="pong :)")
-    embed.add_field(name="comp", value="competition dates")
-    embed.add_field(name="cisco", value="PT modules")
-    embed.add_field(name="yeehaw", value="cowboy")
+    embed.add_field(name="*ping*", value="pong :)")
+    embed.add_field(name="*comp*", value="competition dates")
+    embed.add_field(name="*cisco*", value="PT modules")
+    embed.add_field(name="*yeehaw*", value="cowboy")
     
     await ctx.send(embed=embed)
 @help.command()
