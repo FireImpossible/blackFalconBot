@@ -110,7 +110,7 @@ async def cisco(ctx):
 async def yeehaw(ctx):
     embed = discord.Embed(
         name = "Yeehaw",
-        description = "Cowboy \:abelpog"
+        description = "Cowboy \:abelpog:"
     )
     embed.add_field(name="**Syntax**", value="bf!yeehaw")
     await ctx.send(embed=embed)
