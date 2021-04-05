@@ -8,25 +8,25 @@ import grequests
 import requests
 import time
 
-TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
-intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
-client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
+TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs' #our beautiful token
+intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True) #yas intents
+client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents) #the command is bf![put command here]
 
 # for the soup
-def fixText(text):
+def fixText(text): #fixes text for example, round 1(all teams participate), will be changed to just round 1
     if text.find("(") != -1:
         return text[0:text.find("(")]
     return text
-def clearEmpty(array):
-    fixedArray = []
-    stringArray = []
+def clearEmpty(array): #clears the empty or strings with "" inside of the array so that the algorithms later will work properly.
+    fixedArray = [] #sets up the array that we will put the values that are not empty into
+    stringArray = [] #sets up the string array that will be compared to the original array so that repeats will not be counted again
     for x in range(len(array)):
-        if array[x].get_text() != "":
-            if array[x].get_text() not in stringArray:
+        if array[x].get_text() != "": #test if not empty
+            if array[x].get_text() not in stringArray: #test if the string isn't already in stringArray
                 stringArray.append(array[x].get_text())
                 fixedArray.append(array[x])
     return fixedArray
-def getEvents(Events):
+def getEvents(Events): #the real juicy part
     eventObj = []
     for x in range(len(Events)):
         #print(Events[x].find("strong").get_text())
