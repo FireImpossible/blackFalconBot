@@ -11,7 +11,8 @@ import time
 TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
-
+def nothing():
+    print("nothing haha")
 # for the soup
 def fixText(text):
     if text.find("(") != -1:
