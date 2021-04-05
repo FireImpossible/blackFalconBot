@@ -76,6 +76,7 @@ async def help(ctx):
     embed.add_field(name="ping", value="pong :)")
     embed.add_field(name="comp", value="competition dates")
     embed.add_field(name="cisco", value="PT modules")
+    embed.add_field(name="yeehaw", value="cowboy")
     
     await ctx.send(embed=embed)
 @help.command()
@@ -104,6 +105,14 @@ async def cisco(ctx):
     )
     embed.add_field(name="**Syntax**", value="bf!cisco")
     embed.add_field(name="**Aliases**", value="cisco, pt, packet_tracer, mods, h*ll")
+    await ctx.send(embed=embed)
+@help.command()
+async def yeehaw(ctx):
+    embed = discord.Embed(
+        name = "Yeehaw",
+        description = "Cowboy \:abelpog"
+    )
+    embed.add_field(name="**Syntax**", value="bf!yeehaw")
     await ctx.send(embed=embed)
 
 # im keeping this
