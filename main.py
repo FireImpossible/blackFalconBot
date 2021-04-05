@@ -8,9 +8,10 @@ import grequests
 import requests
 import time
 
-TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
-intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
-client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
+TOKEN = 'ODI4NDQ0NjMyOTg3MDc0NTgw.YGprMA.UexRcmepOOQo4672UXRXtMQ4BDE'
+intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True) ###turn on all intents in the bot dashboard
+
+client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!', 'bffsie!'], intents=intents)
 
 # for the soup
 def fixText(text):
@@ -49,17 +50,21 @@ def getEvents(Events):
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-    await client.get_channel(828314284441337889).send('I am alive')
+    await client.get_channel(736733844958478389).send('hopping in!')
 
 # im keeping this
 @client.command()
 async def ping(ctx):
     await ctx.reply("pong!")
 
+@client.command()
+async def yeehaw(ctx):
+    await ctx.reply("cowboys!")
+
 # gets comp dates
-@client.command(aliases=['comp'])
+@client.command(aliases=['comp', 'dates', 'date', 'comp dates', 'competition', 'competition dates'])
 async def comps(ctx, *args):
-    # remake the soup
+    # remake the soup, set up for url
     url = "https://www.uscyberpatriot.org/competition/current-competition/competition-schedule"
     page = urlopen(url)
     html = page.read().decode("utf-8")
@@ -96,5 +101,29 @@ async def comps(ctx, *args):
 
     # send the soup
     await ctx.send(embed=competition_embed)
+
+@client.command(aliases=['pt', 'packet tracer', 'mods', 'h*ll'])
+async def cisco(ctx, *args):
+
+    #stolen
+    url = "https://www.uscyberpatriot.org/competition/current-competition/challenges-by-round"
+    page = urlopen(url)
+    html = page.read().decode("utf-8")
+    soup = BeautifulSoup(html, "html.parser")
+    tablebody = soup.find_all("tbody")[1].find_all("strong")
+
+
+    #tablebody = soup.find(lambda tag: tag.name=='tbody')[1] 
+
+    trainEvents = tablebody.find_all("tr")
+    eventObj = getEvents(trainEvents)
+
+    ##or maybe first get bold, search until find modules, return + add to embed
+
+    ##future... search by round
+    ##if table data has "modules", add table data to the embed
+    ##get round + date somehow...?
+
+    await ctx.send(tablebody)
 
 client.run(TOKEN)
