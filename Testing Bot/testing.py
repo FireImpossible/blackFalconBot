@@ -64,6 +64,37 @@ async def on_ready():
         print(text_channel_list)
         await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send('Your Best BF is Online') #we've connected to DISCORD!!!!
 
+# help command stuff
+client.remove_command("help")
+@client.group(invoke_without_command=True)
+async def help(ctx):
+    embed = discord.Embed(
+        title = "Help",
+        description = "Use bf!help <command> for more information for each command"
+    )
+    embed.add_field(name="ping", value="pong :)")
+    embed.add_field(name="comp", value="competition dates")
+    
+    await ctx.send(embed=embed)
+@help.command()
+async def ping(ctx):
+    embed = discord.Embed(
+        title = "Ping",
+        description = "Sends back a pong. The first command that this bot did. " + 
+                      "It is very important, and will not be deleted."
+    )
+    embed.add_field(name="**Syntax**", value="bf!ping")
+    await ctx.send(embed=embed)
+@help.command(aliases=['comp'])
+async def comps(ctx):
+    embed = discord.Embed(
+        title = "Competition Dates",
+        description = "Gets all of the training and competition rounds and dates from the CyberPatriot website and displays them."
+    )
+    embed.add_field(name="**Syntax**", value="bf!comp <page #>")
+    embed.add_field(name="**Aliases**", value="comp, comps")
+    await ctx.send(embed=embed)
+
 # im keeping this
 @client.command()
 async def ping(ctx):
