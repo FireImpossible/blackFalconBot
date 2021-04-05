@@ -1,1 +1,1 @@
-worker: python blackFalconBot/main.py
+worker: python main.py
