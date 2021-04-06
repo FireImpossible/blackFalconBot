@@ -147,7 +147,7 @@ async def schedule(ctx, *args):
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     tz = timezone('EST')
     await ctx.send("It got past")
-    today = datetime.datetime.now(tz)
+    today = datetime.datetime.now(tz=timezone('EST'))
     countdown = my_time - today
     await ctx.send(f"my_time -> {my_time} - today -> {today} = countdown -> {countdown}")
     await asyncio.sleep(countdown.total_seconds())
