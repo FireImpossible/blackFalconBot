@@ -12,6 +12,7 @@ from soup_functions import * #look i can write tho
 import psycopg2
 import datetime
 import asyncio
+from pytz import timezone
 
 TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
@@ -144,7 +145,7 @@ async def schedule(ctx, *args):
     if int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
     await ctx.send(f"datetime -> {my_time} \ntext -> {text}")
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
-    today = datetime.datetime.now()
+    today = datetime.datetime.now(timezone('EST'))
     countdown = my_time - today
     await ctx.send(f"my_time -> {my_time} - today -> {today} = countdown -> {countdown}")
     await asyncio.sleep(countdown.total_seconds())
