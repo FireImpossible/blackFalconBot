@@ -9,6 +9,10 @@ import requests
 import time
 from soup_functions import * #look i can write tho
 
+import psycopg2
+import datetime
+import asyncio
+
 TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
@@ -108,6 +112,51 @@ async def announce(ctx, *args):
             text_channel_list.append(channel) #gets actual channel
             channelname.append(channel.name) #gets channel name
     await client.get_channel(text_channel_list[channelname.index("random-announcement-channel")].id).send(f"@everyone \n" + text) #we've connected to DISCORD!!!!
+
+@client.command()
+@commands.has_role("Leadership")
+async def schedule(ctx, *args):
+    text = ""
+    time_string = ""
+    date = []
+    time = []
+    if not args: return
+    else:
+        try:
+            date = args[0].split("/")
+            time = args[1].split(":")
+            if (int(date[2]) < 100): 
+                date[2] = int(date[2]) + 2000
+            my_time = datetime.datetime(int(date[2]), int(date[0]), int(date[1]), int(time[0]), int(time[1]))
+            for arg in args[2:]:
+                text += arg + " "
+            time_string = f"{time[0]}:{time[1]} am"
+        except:
+            exception_embed = discord.Embed(
+                title=f"You're fukcing wrong \✨"
+            )
+            exception_embed.add_field(name="**The** ***CORRECT***  **Syntax**", value="bf!schedule <MM/DD/YYYY> <HH:MM> <announcement>")
+            exception_embed.add_field(name="**Year restriction** \✨", value="Has to be from 0-9999, no exceptions.")
+            exception_embed.add_field(name="**Month restriction** \✨", value="Has to go 1-12, no exceptions.")
+            exception_embed.set_footer(text="Do it right next time.")
+            await ctx.send(embed=exception_embed)
+            return
+    print(f"datetime -> {my_time} \ntext -> {text}")
+    if int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
+    await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
+    today = datetime.datetime.now()
+    countdown = my_time - today
+    await asyncio.sleep(countdown.total_seconds())
+    
+    # put it in a certain channel lmao
+    desired_guild = ctx.guild
+    text_channel_list = []
+    channelname = []
+    for channel in desired_guild.channels: #getting all channels in the servers
+        if str(channel.type).lower() == 'text': #if it's a text channel
+            text_channel_list.append(channel) #gets actual channel
+            channelname.append(channel.name) #gets channel name
+    await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(f"@Elder @younger-boomer \n" + text) #we've connected to DISCORD!!!!
 
 # gets comp dates
 @client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
