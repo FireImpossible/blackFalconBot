@@ -2,3 +2,5 @@ discord.py
 requests
 grequests
 bs4
+psycopg2
+datetime
