@@ -128,7 +128,12 @@ async def schedule(ctx, *args):
             time = args[1].split(":")
             if (int(date[2]) < 100): 
                 date[2] = int(date[2]) + 2000
-            my_time = datetime.datetime(int(date[2]), int(date[0]), int(date[1]), int(time[0]), int(time[1]))
+            # set time
+            if len(time) == 3: # includes seconds
+                my_time = datetime.datetime(int(date[2]), int(date[0]), int(date[1]), int(time[0]), int(time[1]), int(time[2]))
+            else: # doesn't include seconds
+                my_time = datetime.datetime(int(date[2]), int(date[0]), int(date[1]), int(time[0]), int(time[1]))
+            # set the text
             for arg in args[2:]:
                 text += arg + " "
             time_string = f"{time[0]}:{time[1]} am"
@@ -143,12 +148,10 @@ async def schedule(ctx, *args):
             await ctx.send(embed=exception_embed)
             return
     if int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
-    await ctx.send(f"datetime -> {my_time} \ntext -> {text}")
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     my_time = my_time + datetime.timedelta(hours=4)
     today = datetime.datetime.now()
     countdown = my_time - today
-    await ctx.send(f"my_time -> {my_time} - today -> {today} = countdown -> {countdown}")
     await asyncio.sleep(countdown.total_seconds())
     
     # put it in a certain channel lmao
