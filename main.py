@@ -91,6 +91,24 @@ async def ping(ctx):
 async def yeehaw(ctx):
     await ctx.reply("cowbois \🤠")
 
+@client.command()
+@commands.has_role("Leadership")
+async def announce(ctx, *args):
+    text = ""
+    if not args: return
+    else: # put the whole thing into a string
+        for arg in args:
+            text += arg + " "
+    
+    desired_guild = ctx.guild
+    text_channel_list = []
+    channelname = []
+    for channel in desired_guild.channels: #getting all channels in the servers
+        if str(channel.type).lower() == 'text': #if it's a text channel
+            text_channel_list.append(channel) #gets actual channel
+            channelname.append(channel.name) #gets channel name
+    await client.get_channel(text_channel_list[channelname.index("random-announcement-channel")].id).send(f"@everyone \n" + text) #we've connected to DISCORD!!!!
+
 # gets comp dates
 @client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
 async def comps(ctx, *args):
