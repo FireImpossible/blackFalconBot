@@ -269,15 +269,15 @@ async def gm_message():
     month = right_now.day
     time_dif = 0
 
-    if hour == 8 and minute == 0:
+    if hour == 13 and minute == 0:
         time_dif = 0
         return False
-    elif hour <= 8:
-        time_dif = (datetime.datetime(2021, month, day, 8, minute) - datetime.datetime(2021, month, day, hour, minute)).total_seconds()
+    elif hour <= 13:
+        time_dif = (datetime.datetime(2021, month, day, 13, minute) - datetime.datetime(2021, month, day, hour, minute)).total_seconds()
         ##schedule for those secs
     else:
         ##how long has passed since 8 am
-        time_dif = (datetime.datetime(2021, month, day, hour, minute) - datetime.datetime(2021, month, day, 8, minute)).total_seconds()
+        time_dif = (datetime.datetime(2021, month, day, hour, minute) - datetime.datetime(2021, month, day, 13, minute)).total_seconds()
         time_dif = 86400 - time_dif
 
     await asyncio.sleep(time_dif)
