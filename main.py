@@ -260,14 +260,10 @@ async def cisco(ctx, *args):
 @client.event ###how do you do it so its when the bot joins, is it broken in general, why is the ctx underlined
 async def gm_message():
 
-    wakey_messages = ['early birdies get the wormies', 
-                      'wake up eggies, stretch your leggies', 
-                      "get up hatchlings or you'll need patchlings", 
-                      'come on falcons, make some palcons', 
-                      'leave the nest, or youll have nothing left', 
-                      'wakey wakey eggs and bakey', 
-                      'get out of beddies if youre not deddies', 
-                      'stop dreaming or start screaming']
+    message_hour = 14
+    message_minute = 23
+
+    wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies']
 
     right_now = datetime.datetime.now()
     hour = right_now.hour
@@ -276,45 +272,54 @@ async def gm_message():
     month = right_now.day
     time_dif = 0
 
-    if hour == 14 and minute == 0:
+    if hour == message_hour and minute == message_minute:
         time_dif = 0
         return False
-    elif hour <= 14:
-        time_dif = (datetime.datetime(2021, month, day, 14, minute) - datetime.datetime(2021, month, day, hour, minute)).total_seconds()
+    elif hour <= 8:
+        time_dif = (datetime.datetime(2021, month, day, message_hour, message_minute) - datetime.datetime(2021, month, day, hour, minute)).total_seconds()
         ##schedule for those secs
     else:
         ##how long has passed since 8 am
-        time_dif = (datetime.datetime(2021, month, day, hour, minute) - datetime.datetime(2021, month, day, 14, minute)).total_seconds()
+        time_dif = (datetime.datetime(2021, month, day, hour, minute) - datetime.datetime(2021, month, day, message_hour, message_minute)).total_seconds()
         time_dif = 86400 - time_dif
-
+    
     await asyncio.sleep(time_dif)
 
     ##randomize a method
-    message = wakey_messages[random.randint(0, wakey_messages.length)]
+    message = wakey_messages[random.randint(0, len(wakey_messages))]
+    
+    for guild in client.guilds:
+        text_channel_list = []
+        channelname = []
+        for channel in guild.channels: #getting all channels in the servers
+            if str(channel.type).lower() == 'text': #if it's a text channel
+                text_channel_list.append(channel) #gets actual channel
+                channelname.append(channel.name) #gets channel name
+        await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
-    # put it in a certain channel lmao
-    desired_guild = ctx.guild
-    text_channel_list = []
-    channelname = []
-    for channel in desired_guild.channels: #getting all channels in the servers
-        if str(channel.type).lower() == 'text': #if it's a text channel
-            text_channel_list.append(channel) #gets actual channel
-            channelname.append(channel.name) #gets channel name
-    await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(message) #we've connected
+    # # put it in a certain channel lmao
+    # desired_guild = ctx.guild
+    # text_channel_list = []
+    # channelname = []
+    # for channel in desired_guild.channels: #getting all channels in the servers
+    #     if str(channel.type).lower() == 'text': #if it's a text channel
+    #         text_channel_list.append(channel) #gets actual channel
+    #         channelname.append(channel.name) #gets channel name
+    # await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(message) #we've connected
 
     while True:
         await asyncio.sleep(86400)
 
         ##randomize a method
         message = wakey_messages[random.randint(0, wakey_messages.length)]
+        
+        for guild in client.guilds:
+            text_channel_list = []
+            channelname = []
+            for channel in guild.channels: #getting all channels in the servers
+                if str(channel.type).lower() == 'text': #if it's a text channel
+                    text_channel_list.append(channel) #gets actual channel
+                    channelname.append(channel.name) #gets channel name
+            await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
-        # put it in a certain channel lmao
-        desired_guild = ctx.guild
-        text_channel_list = []
-        channelname = []
-        for channel in desired_guild.channels: #getting all channels in the servers
-            if str(channel.type).lower() == 'text': #if it's a text channel
-                text_channel_list.append(channel) #gets actual channel
-                channelname.append(channel.name) #gets channel name
-        await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(message) #we've connected
 client.run(TOKEN)
