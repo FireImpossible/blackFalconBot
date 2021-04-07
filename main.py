@@ -260,10 +260,11 @@ async def cisco(ctx, *args):
 #@client.event ###how do you do it so its when the bot joins, is it broken in general, why is the ctx underlined
 async def gm_message():
 
-    message_hour = 16
-    message_minute = 45
+    message_hour = 8
+    message_minute = 0
 
-    wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies']
+    wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies',
+                     'time for yall eggies to get cracking', 'wake up late and youre falcon bait', 'rise and shine or they will dine', 'if youre not awake youll be baked']
 
     right_now = datetime.datetime.now() - datetime.timedelta(hours=4)
     hour = right_now.hour
@@ -296,18 +297,8 @@ async def gm_message():
             if str(channel.type).lower() == 'text': #if it's a text channel
                 text_channel_list.append(channel) #gets actual channel
                 channelname.append(channel.name) #gets channel name
-        await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
-
-    # # put it in a certain channel lmao
-    # desired_guild = ctx.guild
-    # text_channel_list = []
-    # channelname = []
-    # for channel in desired_guild.channels: #getting all channels in the servers
-    #     if str(channel.type).lower() == 'text': #if it's a text channel
-    #         text_channel_list.append(channel) #gets actual channel
-    #         channelname.append(channel.name) #gets channel name
-    # await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(message) #we've connected
-
+        await client.get_channel(text_channel_list[channelname.index("cargo-hold")].id).send(message) #we've connected to DISCORD!!!!
+        
     while True:
         await asyncio.sleep(86400)
 
