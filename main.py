@@ -261,11 +261,11 @@ async def cisco(ctx, *args):
 async def gm_message():
 
     message_hour = 16
-    message_minute = 34
+    message_minute = 45
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies']
 
-    right_now = datetime.datetime.now() + datetime.timedelta(hours=4)
+    right_now = datetime.datetime.now() - datetime.timedelta(hours=4)
     hour = right_now.hour
     second = right_now.second
     minute = right_now.minute
@@ -287,7 +287,7 @@ async def gm_message():
     await asyncio.sleep(time_dif)
 
     ##randomize a method
-    message = wakey_messages[random.randint(0, len(wakey_messages))] + str(time_dif)
+    message = wakey_messages[random.randint(0, len(wakey_messages))]
     
     for guild in client.guilds:
         text_channel_list = []
