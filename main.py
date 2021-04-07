@@ -261,11 +261,11 @@ async def cisco(ctx, *args):
 async def gm_message():
 
     message_hour = 16
-    message_minute = 28
+    message_minute = 34
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies']
 
-    right_now = datetime.datetime.now()
+    right_now = datetime.datetime.now() + datetime.timedelta(hours=4)
     hour = right_now.hour
     second = right_now.second
     minute = right_now.minute
