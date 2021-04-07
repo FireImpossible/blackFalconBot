@@ -14,6 +14,8 @@ import datetime
 import asyncio
 from pytz import timezone
 
+import random
+
 TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
@@ -36,6 +38,7 @@ async def on_ready():
                 print(channel.name)
         print(text_channel_list)
         await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send('Your Best BF is Online') #we've connected to DISCORD!!!!
+        client.loop.create_task(gm_message())
 
 # help command stuff
 client.remove_command("help")
@@ -254,4 +257,57 @@ async def cisco(ctx, *args):
 
     await ctx.send(embed=cisco_embed)
 
+@client.event ###how do you do it so its when the bot joins, is it broken in general, why is the ctx underlined
+async def gm_message():
+
+    wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies']
+
+    right_now = datetime.datetime.now()
+    hour = right_now.hour
+    minute = right_now.minute
+    day = right_now.day
+    month = right_now.day
+    time_dif = 0
+
+    if hour == 8 and minute == 0:
+        time_dif = 0
+        return False
+    elif hour <= 8:
+        time_dif = (datetime.datetime(2021, month, day, 8, minute) - datetime.datetime(2021, month, day, hour, minute)).total_seconds()
+        ##schedule for those secs
+    else:
+        ##how long has passed since 8 am
+        time_dif = (datetime.datetime(2021, month, day, hour, minute) - datetime.datetime(2021, month, day, 8, minute)).total_seconds()
+        time_dif = 86400 - time_dif
+
+    await asyncio.sleep(time_dif)
+
+    ##randomize a method
+    message = wakey_messages[random.randint(0, wakey_messages.length)]
+
+    # put it in a certain channel lmao
+    desired_guild = ctx.guild
+    text_channel_list = []
+    channelname = []
+    for channel in desired_guild.channels: #getting all channels in the servers
+        if str(channel.type).lower() == 'text': #if it's a text channel
+            text_channel_list.append(channel) #gets actual channel
+            channelname.append(channel.name) #gets channel name
+    await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(message) #we've connected
+
+    while True:
+        await asyncio.sleep(86400)
+
+        ##randomize a method
+        message = wakey_messages[random.randint(0, wakey_messages.length)]
+
+        # put it in a certain channel lmao
+        desired_guild = ctx.guild
+        text_channel_list = []
+        channelname = []
+        for channel in desired_guild.channels: #getting all channels in the servers
+            if str(channel.type).lower() == 'text': #if it's a text channel
+                text_channel_list.append(channel) #gets actual channel
+                channelname.append(channel.name) #gets channel name
+        await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(message) #we've connected
 client.run(TOKEN)
