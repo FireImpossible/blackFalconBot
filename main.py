@@ -257,11 +257,11 @@ async def cisco(ctx, *args):
 
     await ctx.send(embed=cisco_embed)
 
-@client.event ###how do you do it so its when the bot joins, is it broken in general, why is the ctx underlined
+#@client.event ###how do you do it so its when the bot joins, is it broken in general, why is the ctx underlined
 async def gm_message():
 
-    message_hour = 14
-    message_minute = 45
+    message_hour = 16
+    message_minute = 28
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies']
 
