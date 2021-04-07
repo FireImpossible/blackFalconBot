@@ -261,26 +261,27 @@ async def cisco(ctx, *args):
 async def gm_message():
 
     message_hour = 14
-    message_minute = 23
+    message_minute = 35
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies']
 
     right_now = datetime.datetime.now()
     hour = right_now.hour
+    second = right_now.second
     minute = right_now.minute
     day = right_now.day
     month = right_now.day
     time_dif = 0
 
-    if hour == message_hour and minute == message_minute:
+    if hour == message_hour and minute == message_minute and second == 0:
         time_dif = 0
         return False
-    elif hour <= 8:
-        time_dif = (datetime.datetime(2021, month, day, message_hour, message_minute) - datetime.datetime(2021, month, day, hour, minute)).total_seconds()
+    elif hour <= message_hour:
+        time_dif = (datetime.datetime(2021, month, day, message_hour, message_minute, 0) - datetime.datetime(2021, month, day, hour, minute, second)).total_seconds()
         ##schedule for those secs
     else:
         ##how long has passed since 8 am
-        time_dif = (datetime.datetime(2021, month, day, hour, minute) - datetime.datetime(2021, month, day, message_hour, message_minute)).total_seconds()
+        time_dif = (datetime.datetime(2021, month, day, hour, minute, second) - datetime.datetime(2021, month, day, message_hour, message_minute, 0)).total_seconds()
         time_dif = 86400 - time_dif
     
     await asyncio.sleep(time_dif)
@@ -311,7 +312,7 @@ async def gm_message():
         await asyncio.sleep(86400)
 
         ##randomize a method
-        message = wakey_messages[random.randint(0, wakey_messages.length)]
+        message = wakey_messages[random.randint(0, len(wakey_messages))]
         
         for guild in client.guilds:
             text_channel_list = []
@@ -321,5 +322,6 @@ async def gm_message():
                     text_channel_list.append(channel) #gets actual channel
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
+
 
 client.run(TOKEN)
