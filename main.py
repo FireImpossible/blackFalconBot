@@ -261,7 +261,7 @@ async def cisco(ctx, *args):
 async def gm_message():
 
     message_hour = 14
-    message_minute = 35
+    message_minute = 45
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies']
 
