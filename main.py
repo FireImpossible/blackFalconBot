@@ -14,6 +14,8 @@ import datetime
 import asyncio
 from pytz import timezone
 
+import random
+
 TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
@@ -36,6 +38,7 @@ async def on_ready():
                 print(channel.name)
         print(text_channel_list)
         await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send('Your Best BF is Online') #we've connected to DISCORD!!!!
+        client.loop.create_task(gm_message())
 
 # help command stuff
 client.remove_command("help")
@@ -253,5 +256,63 @@ async def cisco(ctx, *args):
         cisco_embed.add_field(name=key, value=mod_dict[key], inline=False)
 
     await ctx.send(embed=cisco_embed)
+
+#@client.event ###how do you do it so its when the bot joins, is it broken in general, why is the ctx underlined
+async def gm_message():
+
+    message_hour = 8
+    message_minute = 0
+
+    wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies',
+                     'time for yall eggies to get cracking', 'wake up late and youre falcon bait', 'rise and shine or they will dine', 'if youre not awake youll be baked']
+
+    right_now = datetime.datetime.now() - datetime.timedelta(hours=4)
+    hour = right_now.hour
+    second = right_now.second
+    minute = right_now.minute
+    day = right_now.day
+    month = right_now.day
+    time_dif = 0
+
+    if hour == message_hour and minute == message_minute and second == 0:
+        time_dif = 0
+        return False
+    elif hour <= message_hour:
+        time_dif = (datetime.datetime(2021, month, day, message_hour, message_minute, 0) - datetime.datetime(2021, month, day, hour, minute, second)).total_seconds()
+        ##schedule for those secs
+    else:
+        ##how long has passed since 8 am
+        time_dif = (datetime.datetime(2021, month, day, hour, minute, second) - datetime.datetime(2021, month, day, message_hour, message_minute, 0)).total_seconds()
+        time_dif = 86400 - time_dif
+    
+    await asyncio.sleep(time_dif)
+
+    ##randomize a method
+    message = wakey_messages[random.randint(0, len(wakey_messages))]
+    
+    for guild in client.guilds:
+        text_channel_list = []
+        channelname = []
+        for channel in guild.channels: #getting all channels in the servers
+            if str(channel.type).lower() == 'text': #if it's a text channel
+                text_channel_list.append(channel) #gets actual channel
+                channelname.append(channel.name) #gets channel name
+        await client.get_channel(text_channel_list[channelname.index("cargo-hold")].id).send(message) #we've connected to DISCORD!!!!
+        
+    while True:
+        await asyncio.sleep(86400)
+
+        ##randomize a method
+        message = wakey_messages[random.randint(0, len(wakey_messages))]
+        
+        for guild in client.guilds:
+            text_channel_list = []
+            channelname = []
+            for channel in guild.channels: #getting all channels in the servers
+                if str(channel.type).lower() == 'text': #if it's a text channel
+                    text_channel_list.append(channel) #gets actual channel
+                    channelname.append(channel.name) #gets channel name
+            await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
+
 
 client.run(TOKEN)
