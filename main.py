@@ -16,6 +16,19 @@ from pytz import timezone
 
 import random
 
+DB_HOST = "ec2-50-16-108-41.compute-1.amazonaws.com"
+DB_NAME = "d89ra8pgoll1n0"
+DB_USER = "uqspjisevftviw"
+DB_PASS = "6d8061c79dabe16cf32c02eefa4a3757f5c25e0531ac6a4762d273130ee0f823"
+
+import psycopg2
+import psycopg2.extras
+import datetime
+
+conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
+cur = conn.cursor()
+
+
 TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
@@ -314,5 +327,30 @@ async def gm_message():
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
+ async def sched_message(message, time_dif):
+    await asyncio.sleep(time_dif)
+
+    for guild in client.guilds:
+            text_channel_list = []
+            channelname = []
+            for channel in guild.channels: #getting all channels in the servers
+                if str(channel.type).lower() == 'text': #if it's a text channel
+                    text_channel_list.append(channel) #gets actual channel
+                    channelname.append(channel.name) #gets channel name
+            await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
+
+cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 19:40", "Message_valuezzzz"))
+
+cur.execute("SELECT * FROM announcements")
+announce = cur.fetchall()
+print(announce)
+for announcemented in announce:
+    my_date = announcemented[1]
+    seconds = (my_date - (datetime.datetime.now() - datetime.timedelta(hours=4))).total_seconds()
+    if seconds > 0:
+        my_message = announcemented[2]
+        client.loop.create_task(sched_message(my_message, seconds))
+
+conn.commit()
 
 client.run(TOKEN)
