@@ -284,11 +284,10 @@ async def gm_message():
         time_dif = (datetime.datetime(2021, month, day, hour, minute, second) - datetime.datetime(2021, month, day, message_hour, message_minute, 0)).total_seconds()
         time_dif = 86400 - time_dif
     
-    time_dif = 10
     await asyncio.sleep(time_dif)
 
     ##randomize a method
-    message = wakey_messages[random.randint(0, len(wakey_messages))]
+    message = wakey_messages[random.randint(0, len(wakey_messages))] + str(time_dif)
     
     for guild in client.guilds:
         text_channel_list = []
