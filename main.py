@@ -171,12 +171,14 @@ async def schedule(ctx, *args):
             exception_embed.set_footer(text="Do it right next time.")
             await ctx.send(embed=exception_embed)
             return
-    if int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
+    if int(time[0]) == 12: time_string = f"{(int(time[0])}:{time[1]} pm"
+    elif int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     await client.get_channel(LOG_CHANNEL_ID).send(f"{ctx.message.author} scheduled the following message for {date[0]}/{date[1]}/{date[2]} at {time_string}:\n**{text}**")
     my_time = my_time + datetime.timedelta(hours=4)
     today = datetime.datetime.now()
     countdown = my_time - today
+    await ctx.send(countdown)
     if countdown < 0: return
     
     cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
