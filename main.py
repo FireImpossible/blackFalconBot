@@ -148,6 +148,7 @@ async def schedule(ctx, *args):
     if not args: return
     elif args[0] == 'show':
         await ctx.send(embed=get_scheduled(ctx.guild))
+        return
     else:
         try:
             date = args[0].split("/")
@@ -199,7 +200,7 @@ async def schedule(ctx, *args):
 
 async def get_scheduled(guild):
 
-    cur.execute("SELECT * FROM announcements WHERE guildName = %s", (guild,))
+    cur.execute("SELECT * FROM announcements WHERE guildName = %s", (str(guild),))
     announce = cur.fetchall()
 
     sched_embed = discord.Embed(
