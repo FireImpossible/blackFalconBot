@@ -168,7 +168,9 @@ async def schedule(ctx, *args):
     my_time = my_time + datetime.timedelta(hours=4)
     today = datetime.datetime.now()
     countdown = my_time - today
-    
+    print("my_time -> " + my_time)
+    print("today -> " + today)
+    print("countdown -> " + countdown)
     cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
     conn.commit()
     
