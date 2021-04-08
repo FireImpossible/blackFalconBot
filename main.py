@@ -165,9 +165,12 @@ async def schedule(ctx, *args):
             return
     if int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
-    my_time = my_time + datetime.timedelta(hours=4)
-    today = datetime.datetime.now()
-    countdown = my_time - today
+    try:
+        my_time = my_time + datetime.timedelta(hours=4)
+        today = datetime.datetime.now()
+        countdown = my_time - today
+    except:
+        await ctx.send("it didnt work foo")
     await ctx.send("my_time -> " + my_time)
     await ctx.send("today -> " + today)
     await ctx.send("countdown -> " + countdown)
