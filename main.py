@@ -340,7 +340,7 @@ async def sched_message(row, message, time_dif):
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
-cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 21:33", "sup dudes"))
+cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 21:37", "this is a new message"))
 
 cur.execute("SELECT * FROM announcements")
 announc = cur.fetchall()
