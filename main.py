@@ -147,7 +147,7 @@ async def schedule(ctx, *args):
     time = []
     if not args: return
     elif args[0] == 'show':
-        get_scheduled()
+        await ctx.send(embed=get_scheduled())
     else:
         try:
             date = args[0].split("/")
