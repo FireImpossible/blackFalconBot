@@ -187,6 +187,7 @@ async def schedule(ctx, *args):
     await asyncio.sleep(countdown.total_seconds())
     # put it in a certain channel lmao
     await message_send(ctx.guild, "getting-rank", text)
+    await ctx.send("sent")
 
 # gets comp dates
 @client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
