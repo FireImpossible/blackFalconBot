@@ -147,7 +147,7 @@ async def schedule(ctx, *args):
     time = []
     if not args: return
     elif args[0] == 'show':
-        await ctx.send(embed=get_scheduled())
+        await ctx.send(embed=get_scheduled(ctx.guild))
     else:
         try:
             date = args[0].split("/")
@@ -197,9 +197,9 @@ async def schedule(ctx, *args):
     cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
 
-async def get_scheduled():
+async def get_scheduled(guild):
 
-    cur.execute("SELECT * FROM announcements")
+    cur.execute("SELECT * FROM announcements guildName = %s", ("FireImpossible's Bot Testing",))
     announce = cur.fetchall()
 
     sched_embed = discord.Embed(
