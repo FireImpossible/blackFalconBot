@@ -178,9 +178,9 @@ async def schedule(ctx, *args):
         await ctx.send("end")
     except:
         await ctx.send("it didnt work foo")
-    await ctx.send("my_time -> " + my_time)
-    await ctx.send("today -> " + today)
-    await ctx.send("countdown -> " + countdown)
+    await ctx.send(my_time)
+    await ctx.send(today)
+    await ctx.send(countdown)
     cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
     conn.commit()
     
