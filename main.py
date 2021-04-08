@@ -169,16 +169,8 @@ async def schedule(ctx, *args):
     today = datetime.datetime.now()
     countdown = my_time - today
     await asyncio.sleep(countdown.total_seconds())
-    
     # put it in a certain channel lmao
-    desired_guild = ctx.guild
-    text_channel_list = []
-    channelname = []
-    for channel in desired_guild.channels: #getting all channels in the servers
-        if str(channel.type).lower() == 'text': #if it's a text channel
-            text_channel_list.append(channel) #gets actual channel
-            channelname.append(channel.name) #gets channel name
-    await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(f"@Elder @younger-boomer \n" + text) #we've connected to DISCORD!!!!
+    await message_send(ctx.guild, "getting-rank", text)
 
 # gets comp dates
 @client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
