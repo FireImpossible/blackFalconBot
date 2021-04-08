@@ -169,18 +169,18 @@ async def schedule(ctx, *args):
     if int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     try:
-        await ctx.send("before time")
+        #await ctx.send("before time")
         my_time = my_time + datetime.timedelta(hours=4)
-        await ctx.send("before today")
+        #await ctx.send("before today")
         today = datetime.datetime.now()
-        await ctx.send("before countdown")
+        #await ctx.send("before countdown")
         countdown = my_time - today
-        await ctx.send("end")
+        #await ctx.send("end")
     except:
         await ctx.send("it didnt work foo")
-    await ctx.send(my_time)
-    await ctx.send(today)
-    await ctx.send(countdown)
+    #await ctx.send(my_time)
+    #await ctx.send(today)
+    #await ctx.send(countdown)
     cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
     conn.commit()
     
@@ -335,7 +335,15 @@ async def gm_message():
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
-            
+async def message_send(guild, channel_name, message):
+    text_channel_list = []
+    channelname = []
+    for channel in guild.channels: #getting all channels in the servers
+        if str(channel.type).lower() == 'text': #if it's a text channel
+            text_channel_list.append(channel) #gets actual channel
+            channelname.append(channel.name) #gets channel name
+    await client.get_channel(text_channel_list[channelname.index(channel_name)].id).send(message) #we've connected to DISCORD!!!!
+
 ##get data...
 async def sched_message(row, message, time_dif):
     await asyncio.sleep(time_dif)
