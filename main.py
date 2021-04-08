@@ -176,7 +176,6 @@ async def schedule(ctx, *args):
     my_time = my_time + datetime.timedelta(hours=4)
     today = datetime.datetime.now()
     countdown = my_time - today
-    await ctx.send(countdown)
     if countdown.total_seconds() < 0: return
     # messages
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
