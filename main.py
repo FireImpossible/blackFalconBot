@@ -20,11 +20,11 @@ from pytz import timezone
 import random
 import datetime
 
-TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
+TOKEN = 'ODI4ODM3NjM5NTQ4Njk4NjI0.YGvZNA.tAXu2mYiXXZKLMIfhXNwNP8QYE0'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
 
-LOG_CHANNEL_ID = 829697432534122546
+LOG_CHANNEL_ID = 828661308223914044
 
 # bot starts
 @client.event
@@ -139,6 +139,15 @@ async def announce(ctx, *args):
             channelname.append(channel.name) #gets channel name
     await client.get_channel(text_channel_list[channelname.index("random-announcement-channel")].id).send(f"@everyone \n" + text) #we've connected to DISCORD!!!!
 
+def delete_scheduled(my_id):
+    message = "Announcement " + my_id + " has been deleted"
+    try: 
+        cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
+    except:
+        message = "That message doesn't exist!" 
+    return message
+
+
 @client.command()
 @commands.has_role("Leadership")
 async def schedule(ctx, *args):
@@ -155,6 +164,13 @@ async def schedule(ctx, *args):
             my_page = 1
         await ctx.send(embed=get_scheduled(ctx.guild, my_page))
         return
+    elif args[0] == 'delete':
+        delete_id = 0
+        try:
+            delete_id = int(args[1])
+        except:
+            delete_id = 0
+        await ctx.send(delete_scheduled(delete_id))
     else:
         try:
             date = args[0].split("/")
@@ -203,6 +219,7 @@ async def schedule(ctx, *args):
     # after sending, remove it from the database
     cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
+
 def get_scheduled(guild, page):
 
     cur.execute("SELECT * FROM announcements WHERE guildName = %s", (str(guild),))
@@ -217,16 +234,16 @@ def get_scheduled(guild, page):
 
     if (page > max_pages): page = max_pages
     #competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
-    sched_embed.set_footer(text=f"Viewing page {page + 1} out of {max_pages + 1}.")
+    sched_embed.set_footer(text=f"Viewing page {page} out of {max_pages}.")
     
-    page_start = (page) * 10
+    page_start = (page - 1) * 10
     page_end = page_start + 9
 
     print(page_start)
     print(page_end)
 
     if(page == max_pages):
-        page_end = len(announce) - 1
+        page_end = len(announce)
 
     for x in range(page_start, page_end):
         announcemented = announce[x]
