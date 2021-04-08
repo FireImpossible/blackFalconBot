@@ -146,6 +146,8 @@ async def schedule(ctx, *args):
     date = []
     time = []
     if not args: return
+    elif args[0] == 'show':
+        await ctx.send(embed=get_scheduled())
     else:
         try:
             date = args[0].split("/")
@@ -195,6 +197,39 @@ async def schedule(ctx, *args):
     cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
 
+async def get_scheduled():
+
+    cur.execute("SELECT * FROM announcements")
+    announce = cur.fetchall()
+
+    sched_embed = discord.Embed(
+        title=f"Scheduled Announcements:"
+    )
+    page_num = 0
+    #competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
+    sched_embed.set_footer(text=f"Viewing page {page_num}.")
+    
+    for announcemented in announce:
+        my_id = announcemented[0]
+        my_date = str(announcemented[1])
+        my_message = announcemented[2]
+
+        schedule_shower = my_message + " scheduled for " + my_date
+        sched_embed.add_field(name=my_id, value=schedule_shower, inline=False)
+        
+    ##deal with pages later....
+    # # get args length
+    # if not args:
+    #     page_num = 1
+    # else:
+    #     if int(args[0]) > 2 or int(args[0]) < 1:
+    #         page_num = 1
+    #     else:
+    #         page_num = int(args[0])
+
+    return sched_embed
+    
+    
 # gets comp dates
 @client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
 async def comps(ctx, *args):
