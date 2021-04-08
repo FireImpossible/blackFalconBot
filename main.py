@@ -168,26 +168,24 @@ async def schedule(ctx, *args):
             return
     if int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
-    try:
-        #await ctx.send("before time")
-        my_time = my_time + datetime.timedelta(hours=4)
-        #await ctx.send("before today")
-        today = datetime.datetime.now()
-        #await ctx.send("before countdown")
-        countdown = my_time - today
-        #await ctx.send("end")
-    except:
-        await ctx.send("it didnt work foo")
-    #await ctx.send(my_time)
-    #await ctx.send(today)
-    #await ctx.send(countdown)
+    my_time = my_time + datetime.timedelta(hours=4)
+    today = datetime.datetime.now()
+    countdown = my_time - today
+    
     cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
     conn.commit()
+    
+    # get the id
+    cur.execute("SELECT * FROM announcements")
+    s = cur.fetchall()
+    message_id = s[-1][0]
+    await ctx.send(message_id)
     
     await asyncio.sleep(countdown.total_seconds())
     # put it in a certain channel lmao
     await message_send(ctx.guild, "getting-rank", text)
-    await ctx.send("sent")
+    cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
+    conn.commit()
 
 # gets comp dates
 @client.command(aliases=['comp', 'dates', 'date', 'comp_dates', 'competition', 'competition_dates'])
