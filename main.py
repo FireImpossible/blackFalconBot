@@ -168,6 +168,10 @@ async def schedule(ctx, *args):
     my_time = my_time + datetime.timedelta(hours=4)
     today = datetime.datetime.now()
     countdown = my_time - today
+    
+    cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
+    conn.commit()
+    
     await asyncio.sleep(countdown.total_seconds())
     # put it in a certain channel lmao
     await message_send(ctx.guild, "getting-rank", text)
@@ -265,8 +269,8 @@ async def cisco(ctx, *args):
 #@client.event ###how do you do it so its when the bot joins, is it broken in general, why is the ctx underlined
 async def gm_message():
 
-    message_hour = 8
-    message_minute = 0
+    message_hour = 7
+    message_minute = 25
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies', 'time for yall eggies to get cracking', 'wake up late and youre falcon bait', 'rise and shine or they will dine', 'if youre not awake youll be baked', 'sleep is canceled so you dont get scrambled']
 
@@ -318,11 +322,14 @@ async def gm_message():
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
+            
 ##get data...
-
 async def sched_message(row, message, time_dif):
     await asyncio.sleep(time_dif)
-    #cur.execute("DELETE FROM people WHERE id = %s", (row,))
+
+    cur.execute("ROLLBACK")
+    cur.execute("DELETE FROM announcements WHERE id = %s", (row,))
+
     for guild in client.guilds:
             text_channel_list = []
             channelname = []
@@ -332,22 +339,23 @@ async def sched_message(row, message, time_dif):
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
-cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 21:57:30", "the newest messagest"))
+cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 20:13", "pls work my guy"))
 
 cur.execute("SELECT * FROM announcements")
-announc = cur.fetchall()
-print(announc)
-for announcemented in announc:
+announce = cur.fetchall()
+print(announce)
+for announcemented in announce:
     my_date = announcemented[1]
-    seconds = ((my_date + datetime.timedelta(hours=4)) - datetime.datetime.now()).total_seconds()
+    seconds = (my_date + datetime.timedelta(hours=4) - datetime.datetime.now()).total_seconds()
     my_id = announcemented[0]
     if seconds > 0:
         my_message = announcemented[2]
         client.loop.create_task(sched_message(my_id, my_message, seconds))
     else:
-        x = 0
-        ##delete from database
+        cur.execute("ROLLBACK")
+        cur.execute("DELETE FROM announcements WHERE id = %s", (my_id,))
 
 conn.commit()
+
 
 client.run(TOKEN)
