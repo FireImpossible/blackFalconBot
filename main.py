@@ -55,6 +55,19 @@ async def on_ready():
         await client.get_channel(LOG_CHANNEL_ID).send("Your Best BF is Online!")
         # await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send('Your Best BF is Online') #we've connected to DISCORD!!!!
         client.loop.create_task(gm_message())
+        
+        
+@client.event
+async def on_message(message):
+    if client.user != message.author:
+        for word in bad_words:
+            if word in message.content.lower():
+                await message.author.send(f'Your message was deleted because it contained "{word}".')
+                await client.get_channel(LOG_CHANNEL_ID).send(f"{message.author} decided to be naughty and said a bad word!")
+                await message.delete()
+                return
+    await client.process_commands(message)
+    
 
 # help command stuff
 client.remove_command("help")
