@@ -29,7 +29,7 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_
 cur = conn.cursor()
 
 
-TOKEN = 'ODI4ODM3NjM5NTQ4Njk4NjI0.YGvZNA.tAXu2mYiXXZKLMIfhXNwNP8QYE0'
+TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
 
