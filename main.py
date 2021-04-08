@@ -184,7 +184,7 @@ async def schedule(ctx, *args):
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     await client.get_channel(LOG_CHANNEL_ID).send(f"{ctx.message.author} scheduled the following message for {date[0]}/{date[1]}/{date[2]} at {time_string}:\n**{text}**")
     # put it into the database
-    cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
+    cur.execute("INSERT INTO announcements (datetime, message, guildName) VALUES(%s, %s, %s)", (my_time, text, str(ctx.guild))
     conn.commit()
     # get the id
     cur.execute("SELECT * FROM announcements")
