@@ -173,25 +173,26 @@ async def schedule(ctx, *args):
             return
     if int(time[0]) == 12: time_string = f"{time[0]}:{time[1]} pm"
     elif int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
-    await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
-    await client.get_channel(LOG_CHANNEL_ID).send(f"{ctx.message.author} scheduled the following message for {date[0]}/{date[1]}/{date[2]} at {time_string}:\n**{text}**")
     my_time = my_time + datetime.timedelta(hours=4)
     today = datetime.datetime.now()
     countdown = my_time - today
     await ctx.send(countdown)
     if countdown.total_seconds() < 0: return
-    
+    # messages
+    await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
+    await client.get_channel(LOG_CHANNEL_ID).send(f"{ctx.message.author} scheduled the following message for {date[0]}/{date[1]}/{date[2]} at {time_string}:\n**{text}**")
+    # put it into the database
     cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
     conn.commit()
-    
     # get the id
     cur.execute("SELECT * FROM announcements")
     s = cur.fetchall()
     message_id = s[-1][0]
-    
+    # wait the time
     await asyncio.sleep(countdown.total_seconds())
     # put it in a certain channel lmao
     await message_send(ctx.guild, "getting-rank", text)
+    # after sending, remove it from the database
     cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
 
