@@ -1,4 +1,5 @@
 # bot.py
+##wya...
 import discord
 from discord.ext import commands
 from urllib.request import urlopen
