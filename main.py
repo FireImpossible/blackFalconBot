@@ -217,9 +217,9 @@ def get_scheduled(guild, page):
 
     if (page > max_pages): page = max_pages
     #competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
-    sched_embed.set_footer(text=f"Viewing page {page} out of {max_pages}.")
+    sched_embed.set_footer(text=f"Viewing page {page + 1} out of {max_pages + 1}.")
     
-    page_start = (page - 1) * 10
+    page_start = (page) * 10
     page_end = page_start + 9
 
     print(page_start)
@@ -251,7 +251,6 @@ def get_scheduled(guild, page):
     #         page_num = int(args[0])
 
     return sched_embed
-
     
     
 # gets comp dates
