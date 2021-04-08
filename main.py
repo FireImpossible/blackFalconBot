@@ -199,7 +199,7 @@ async def schedule(ctx, *args):
 
 async def get_scheduled(guild):
 
-    cur.execute("SELECT * FROM announcements WHERE guildName = %s", ("FireImpossible's Bot Testing",))
+    cur.execute("SELECT * FROM announcements WHERE guildName = %s", (guild,))
     announce = cur.fetchall()
 
     sched_embed = discord.Embed(
