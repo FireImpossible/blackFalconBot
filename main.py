@@ -33,6 +33,8 @@ TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
 
+LOG_CHANNEL = client.get_channel(829697432534122546)
+
 # bot starts
 @client.event
 async def on_ready():
@@ -50,7 +52,8 @@ async def on_ready():
                 channelname.append(channel.name) #gets channel name
                 print(channel.name)
         print(text_channel_list)
-        await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send('Your Best BF is Online') #we've connected to DISCORD!!!!
+        await LOG_CHANNEL.send("Your Best BF is Online!")
+        # await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send('Your Best BF is Online') #we've connected to DISCORD!!!!
         client.loop.create_task(gm_message())
 
 # help command stuff
