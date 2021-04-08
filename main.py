@@ -198,7 +198,7 @@ async def schedule(ctx, *args):
     cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
 
-async def get_scheduled(guild):
+def get_scheduled(guild):
 
     cur.execute("SELECT * FROM announcements WHERE guildName = %s", (str(guild),))
     announce = cur.fetchall()
