@@ -179,7 +179,7 @@ async def schedule(ctx, *args):
     today = datetime.datetime.now()
     countdown = my_time - today
     #await ctx.send(countdown)
-    if countdown < 0: return
+    if countdown.total_seconds() < 0: return
     
     cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
     conn.commit()
