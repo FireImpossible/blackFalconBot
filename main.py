@@ -61,6 +61,8 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if client.user != message.author:
+        if message.content.lower() == 'rank':
+            await message.author.send('youre not getting to #1 bro \✨')
         for word in bad_words:
             if word in message.content.lower():
                 await message.author.send(f'Your message was deleted because it contained "{word}".')
