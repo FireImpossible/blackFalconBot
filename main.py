@@ -16,17 +16,17 @@ from pytz import timezone
 
 import random
 
-#DB_HOST = "ec2-50-16-108-41.compute-1.amazonaws.com"
-# DB_NAME = "d89ra8pgoll1n0"
-# DB_USER = "uqspjisevftviw"
-# DB_PASS = "6d8061c79dabe16cf32c02eefa4a3757f5c25e0531ac6a4762d273130ee0f823"
+DB_HOST = "ec2-50-16-108-41.compute-1.amazonaws.com"
+DB_NAME = "d89ra8pgoll1n0"
+DB_USER = "uqspjisevftviw"
+DB_PASS = "6d8061c79dabe16cf32c02eefa4a3757f5c25e0531ac6a4762d273130ee0f823"
 
-# import psycopg2
-# import psycopg2.extras
-# import datetime
+import psycopg2
+import psycopg2.extras
+import datetime
 
-# conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
-# cur = conn.cursor()
+conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
+cur = conn.cursor()
 
 
 TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
@@ -276,8 +276,7 @@ async def gm_message():
     message_hour = 8
     message_minute = 0
 
-    wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies',
-                     'time for yall eggies to get cracking', 'wake up late and youre falcon bait', 'rise and shine or they will dine', 'if youre not awake youll be baked']
+    wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies', 'time for yall eggies to get cracking', 'wake up late and youre falcon bait', 'rise and shine or they will dine', 'if youre not awake youll be baked', 'sleep is canceled so you dont get scrambled']
 
     right_now = datetime.datetime.now() - datetime.timedelta(hours=4)
     hour = right_now.hour
@@ -327,31 +326,36 @@ async def gm_message():
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
-#async def sched_message(message, time_dif):
-#     await asyncio.sleep(time_dif)
+##get data...
 
-#     for guild in client.guilds:
-#             text_channel_list = []
-#             channelname = []
-#             for channel in guild.channels: #getting all channels in the servers
-#                 if str(channel.type).lower() == 'text': #if it's a text channel
-#                     text_channel_list.append(channel) #gets actual channel
-#                     channelname.append(channel.name) #gets channel name
-#             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
+async def sched_message(row, message, time_dif):
+    await asyncio.sleep(time_dif)
+    #cur.execute("DELETE FROM people WHERE id = %s", (row,))
+    for guild in client.guilds:
+            text_channel_list = []
+            channelname = []
+            for channel in guild.channels: #getting all channels in the servers
+                if str(channel.type).lower() == 'text': #if it's a text channel
+                    text_channel_list.append(channel) #gets actual channel
+                    channelname.append(channel.name) #gets channel name
+            await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
-# cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 19:40", "Message_valuezzzz"))
+cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 20:25", "sup dudes"))
 
-# cur.execute("SELECT * FROM announcements")
-# announce = cur.fetchall()
-# print(announce)
-# for announcemented in announce:
-#     my_date = announcemented[1]
-#     seconds = (my_date - datetime.datetime.now()).total_seconds()
-#     if seconds > 0:
-#         my_message = announcemented[2]
-#         client.loop.create_task(sched_message(my_message, seconds))
+cur.execute("SELECT * FROM announcements")
+announce = cur.fetchall()
+print(announce)
+for announcemented in announce:
+    my_date = announcemented[1]
+    seconds = (my_date - datetime.datetime.now()).total_seconds()
+    my_id = announcemented[0]
+    if seconds > 0:
+        my_message = announcemented[2]
+        client.loop.create_task(sched_message(my_id, my_message, seconds))
+    else:
+        x = 0
+        ##delete from database
 
-# conn.commit()
-
+conn.commit()
 
 client.run(TOKEN)
