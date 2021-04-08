@@ -343,9 +343,9 @@ async def sched_message(row, message, time_dif):
 cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 20:25", "sup dudes"))
 
 cur.execute("SELECT * FROM announcements")
-announce = cur.fetchall()
-print(announce)
-for announcemented in announce:
+announc = cur.fetchall()
+print(announc)
+for announcemented in announc:
     my_date = announcemented[1]
     seconds = (my_date - datetime.datetime.now()).total_seconds()
     my_id = announcemented[0]
