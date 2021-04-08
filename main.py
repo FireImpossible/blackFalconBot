@@ -226,7 +226,7 @@ def get_scheduled(guild, page):
     print(page_end)
 
     if(page == max_pages):
-        page_end = len(announce)
+        page_end = len(announce) - 1
 
     for x in range(page_start, page_end):
         announcemented = announce[x]
