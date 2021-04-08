@@ -251,7 +251,6 @@ def get_scheduled(guild, page):
     #         page_num = int(args[0])
 
     return sched_embed
-
     
     
 # gets comp dates
