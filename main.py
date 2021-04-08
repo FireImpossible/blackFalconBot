@@ -179,7 +179,6 @@ async def schedule(ctx, *args):
     cur.execute("SELECT * FROM announcements")
     s = cur.fetchall()
     message_id = s[-1][0]
-    await ctx.send(message_id)
     
     await asyncio.sleep(countdown.total_seconds())
     # put it in a certain channel lmao
