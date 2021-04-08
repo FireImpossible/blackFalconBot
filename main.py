@@ -8,6 +8,7 @@ import grequests
 import requests 
 import time
 from soup_functions import * #look i can write tho
+from badWords import bad_words
 
 import psycopg2
 import datetime
