@@ -1,4 +1,5 @@
 # bot.py
+##wya...
 import discord
 from discord.ext import commands
 from urllib.request import urlopen
@@ -148,6 +149,7 @@ async def schedule(ctx, *args):
     if not args: return
     elif args[0] == 'show':
         await ctx.send(embed=get_scheduled(ctx.guild))
+        return
     else:
         try:
             date = args[0].split("/")
@@ -183,7 +185,7 @@ async def schedule(ctx, *args):
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     await client.get_channel(LOG_CHANNEL_ID).send(f"{ctx.message.author} scheduled the following message for {date[0]}/{date[1]}/{date[2]} at {time_string}:\n**{text}**")
     # put it into the database
-    cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", (my_time, text))
+    cur.execute("INSERT INTO announcements (datetime, message, guildName) VALUES(%s, %s, %s)", (my_time, text, str(ctx.guild))
     conn.commit()
     # get the id
     cur.execute("SELECT * FROM announcements")
@@ -197,9 +199,9 @@ async def schedule(ctx, *args):
     cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
 
-async def get_scheduled(guild):
+def get_scheduled(guild):
 
-    cur.execute("SELECT * FROM announcements WHERE guildName = %s", (guild,))
+    cur.execute("SELECT * FROM announcements WHERE guildName = %s", (str(guild),))
     announce = cur.fetchall()
 
     sched_embed = discord.Embed(
