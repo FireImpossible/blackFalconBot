@@ -148,7 +148,12 @@ async def schedule(ctx, *args):
     time = []
     if not args: return
     elif args[0] == 'show':
-        await ctx.send(embed=get_scheduled(ctx.guild))
+        my_page = 1
+        try:
+            my_page = int(args[1])
+        except:
+            my_page = 1
+        await ctx.send(embed=get_scheduled(ctx.guild, my_page))
         return
     else:
         try:
@@ -198,8 +203,7 @@ async def schedule(ctx, *args):
     # after sending, remove it from the database
     cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
-
-def get_scheduled(guild):
+def get_scheduled(guild, page):
 
     cur.execute("SELECT * FROM announcements WHERE guildName = %s", (str(guild),))
     announce = cur.fetchall()
@@ -207,17 +211,34 @@ def get_scheduled(guild):
     sched_embed = discord.Embed(
         title=f"Scheduled Announcements:"
     )
-    page_num = 0
-    #competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
-    sched_embed.set_footer(text=f"Viewing page {page_num}.")
     
-    for announcemented in announce:
+
+    max_pages = round(len(announce) / 10)
+
+    if (page > max_pages): page = max_pages
+    #competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
+    sched_embed.set_footer(text=f"Viewing page {page} out of {max_pages}.")
+    
+    page_start = (page - 1) * 10
+    page_end = page_start + 9
+
+    print(page_start)
+    print(page_end)
+
+    if(page == max_pages):
+        page_end = len(announce)
+
+    for x in range(page_start, page_end):
+        announcemented = announce[x]
         my_id = announcemented[0]
         my_date = str(announcemented[1])
         my_message = announcemented[2]
 
         schedule_shower = my_message + " scheduled for " + my_date
         sched_embed.add_field(name=my_id, value=schedule_shower, inline=False)
+
+    #for announcemented in announce:
+        
         
     ##deal with pages later....
     # # get args length
@@ -230,6 +251,7 @@ def get_scheduled(guild):
     #         page_num = int(args[0])
 
     return sched_embed
+
     
     
 # gets comp dates
