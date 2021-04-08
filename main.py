@@ -196,8 +196,7 @@ async def schedule(ctx, *args):
     # put it in a certain channel lmao
     await message_send(ctx.guild, "getting-rank", text)
     # after sending, remove it from the database
-    cur.execute("DELETE FROM announcements 
-                id = %s", (message_id,))
+    cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
 
 def get_scheduled(guild):
