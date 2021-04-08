@@ -20,11 +20,11 @@ from pytz import timezone
 import random
 import datetime
 
-TOKEN = 'ODI4ODM3NjM5NTQ4Njk4NjI0.YGvZNA.tAXu2mYiXXZKLMIfhXNwNP8QYE0'
+TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
 
-LOG_CHANNEL_ID = 828661308223914044
+LOG_CHANNEL_ID = 829697432534122546
 
 # bot starts
 @client.event
@@ -140,9 +140,9 @@ async def announce(ctx, *args):
     await client.get_channel(text_channel_list[channelname.index("random-announcement-channel")].id).send(f"@everyone \n" + text) #we've connected to DISCORD!!!!
 
 def delete_scheduled(my_id):
-    message = "Announcement " + my_id + " has been deleted"
+    message = "Announcement " + str(my_id) + " has been deleted"
     try: 
-        cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
+        cur.execute("DELETE FROM announcements WHERE id = %s", (my_id,))
     except:
         message = "That message doesn't exist!" 
     return message
@@ -234,13 +234,10 @@ def get_scheduled(guild, page):
 
     if (page > max_pages): page = max_pages
     #competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
-    sched_embed.set_footer(text=f"Viewing page {page} out of {max_pages}.")
-    
-    page_start = (page - 1) * 10
-    page_end = page_start + 9
+    sched_embed.set_footer(text=f"Viewing page {page + 1} out of {max_pages + 1}.")   
 
-    print(page_start)
-    print(page_end)
+    page_start = (page) * 10
+    page_end = page_start + 9
 
     if(page == max_pages):
         page_end = len(announce)
