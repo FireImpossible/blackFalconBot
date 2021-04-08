@@ -185,7 +185,7 @@ async def schedule(ctx, *args):
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     await client.get_channel(LOG_CHANNEL_ID).send(f"{ctx.message.author} scheduled the following message for {date[0]}/{date[1]}/{date[2]} at {time_string}:\n**{text}**")
     # put it into the database
-    cur.execute("INSERT INTO announcements (datetime, message, guildName) VALUES(%s, %s, %s)", (my_time, text, str(ctx.guild))
+    cur.execute("INSERT INTO announcements (datetime, message, guildName) VALUES(%s, %s, %s)", (my_time, text, str(ctx.guild)))
     conn.commit()
     # get the id
     cur.execute("SELECT * FROM announcements")
@@ -196,7 +196,8 @@ async def schedule(ctx, *args):
     # put it in a certain channel lmao
     await message_send(ctx.guild, "getting-rank", text)
     # after sending, remove it from the database
-    cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
+    cur.execute("DELETE FROM announcements 
+                id = %s", (message_id,))
     conn.commit()
 
 def get_scheduled(guild):
