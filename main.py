@@ -347,7 +347,7 @@ announc = cur.fetchall()
 print(announc)
 for announcemented in announc:
     my_date = announcemented[1]
-    seconds = (my_date - datetime.datetime.now()).total_seconds()
+    seconds = ((my_date + datetime.timedelta(hours=4)) - datetime.datetime.now()).total_seconds()
     my_id = announcemented[0]
     if seconds > 0:
         my_message = announcemented[2]
