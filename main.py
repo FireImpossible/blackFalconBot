@@ -354,9 +354,6 @@ async def message_send(guild, channel_name, message):
 async def sched_message(row, message, time_dif):
     await asyncio.sleep(time_dif)
 
-    cur.execute("ROLLBACK")
-    cur.execute("DELETE FROM announcements WHERE id = %s", (row,))
-
     for guild in client.guilds:
             text_channel_list = []
             channelname = []
@@ -365,6 +362,8 @@ async def sched_message(row, message, time_dif):
                     text_channel_list.append(channel) #gets actual channel
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
+    cur.execute("ROLLBACK")
+    cur.execute("DELETE FROM announcements WHERE id = %s", (row,))
 
 cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 20:13", "pls work my guy"))
 
