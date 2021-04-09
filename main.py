@@ -14,14 +14,9 @@ from badWords import bad_words
 from magicBall import *
 
 import psycopg2
+import datetime
 import asyncio
 from pytz import timezone
-
-import time
-import datetime
-import pytz
-from tzlocal import get_localzone
-
 
 import random
 import datetime
@@ -33,17 +28,6 @@ client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=inten
 LOG_CHANNEL_ID = 829697432534122546
 
 time_zone = 4
-
-def convertDateTime(inputDate):
-    eastern = timezone("US/Eastern")
-    local_tz = get_localzone()
-    #print(dt)#datetime(2002, 10, 27, 6, 0, 0)
-    #inputDate = datetime.datetime(2021, 10, 8, 6, 0, 0)#replace with the time we input
-    convertDate = eastern.localize(inputDate.replace(tzinfo=None)).astimezone(local_tz) #will set it to the local system time
-    print(inputDate)
-    print(convertDate)
-    return convertDate.replace(tzinfo=None)
-
 
 # bot starts
 @client.event
@@ -253,7 +237,7 @@ async def schedule(ctx, *args):
             return
     if int(time[0]) == 12: time_string = f"{time[0]}:{time[1]} pm"
     elif int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
-    my_time = convertDateTime(my_time)
+    my_time = my_time + datetime.timedelta(hours=time_zone)
     today = datetime.datetime.now()
     countdown = my_time - today
     if countdown.total_seconds() < 0: return
@@ -420,7 +404,7 @@ async def gm_message():
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies', 'time for yall eggies to get cracking', 'wake up late and youre falcon bait', 'rise and shine or they will dine', 'if youre not awake youll be baked', 'sleep is canceled so you dont get scrambled']
 
-    right_now = convertDateTime(datetime.datetime.now())
+    right_now = datetime.datetime.now() - datetime.timedelta(hours=time_zone)
     hour = right_now.hour
     second = right_now.second
     minute = right_now.minute
@@ -499,7 +483,7 @@ announce = cur.fetchall()
 print(announce)
 for announcemented in announce:
     my_date = announcemented[1]
-    seconds = (my_date + convertDateTime(datetime.datetime.now())).total_seconds()
+    seconds = (my_date + datetime.timedelta(hours=time_zone) - datetime.datetime.now()).total_seconds()
     my_id = announcemented[0]
     if seconds > 0:
         my_message = announcemented[2]
