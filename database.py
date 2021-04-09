@@ -1,5 +1,8 @@
 import os
 
+if os.getenv("HOME") != '/app':
+    from environment import *
+
 DB_HOST = os.getenv('DATABASE_URL')[91:131]
 DB_NAME = os.getenv('DATABASE_URL')[137:]
 DB_USER = os.getenv('DATABASE_URL')[11:25]

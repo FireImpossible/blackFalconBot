@@ -1,5 +1,4 @@
-# bot.py
-##wya...
+import os
 from bot import *
 from urllib.request import urlopen
 
@@ -15,7 +14,6 @@ from manage_timezones import *
 import psycopg2
 import datetime
 import asyncio
-import os
 
 import random
 import datetime
