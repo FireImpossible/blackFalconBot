@@ -475,7 +475,7 @@ async def sched_message(row, message, time_dif):
                 if str(channel.type).lower() == 'text': #if it's a text channel
                     text_channel_list.append(channel) #gets actual channel
                     channelname.append(channel.name) #gets channel name
-            await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
+            await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(message) #we've connected to DISCORD!!!!
     cur.execute("ROLLBACK")
     cur.execute("DELETE FROM announcements WHERE id = %s", (row,))
 
