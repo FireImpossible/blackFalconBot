@@ -75,7 +75,11 @@ async def help(ctx):
     embed.add_field(name="**comp**", value="competition dates")
     embed.add_field(name="**cisco**", value="PT modules")
     embed.add_field(name="**yeehaw**", value="cowboy")
-    
+    for x in ctx.message.author.roles:
+        if "Leadership" in str(x):
+            embed.add_field(name="**announce**", value="say something to everyone")
+            embed.add_field(name="**schedule**", value="schedule an announcement")
+            embed.add_field(name="**quote**", value="if someone says something stupid, save it")
     await ctx.send(embed=embed)
 @help.command()
 async def ping(ctx):
@@ -111,6 +115,36 @@ async def yeehaw(ctx):
         description = "Cowboy <:abelpog:824676945639243812>"
     )
     embed.add_field(name="**Syntax**", value="bf!yeehaw")
+    await ctx.send(embed=embed)
+@help.command()
+@commands.has_role("Leadership")
+async def announce(ctx):
+    embed = discord.Embed(
+        title = "Announce",
+        description = "Send a message to the random announcement channel"
+    )
+    embed.add_field(name="**Syntax**", value="bf!announce <message>")
+    await ctx.send(embed=embed)
+@help.command()
+@commands.has_role("Leadership")
+async def schedule(ctx):
+    embed = discord.Embed(
+        title = "Schedule",
+        description = "Schedule an announcement to happen at a later time, or date"
+    )
+    embed.add_field(name="**Syntax**", value="bf!schedule <date> <time> <message>")
+    embed.add_field(name="**Date**", value="There always has to be a date, even if you just want to send it later that day.\n" +
+                                           "The date has to be in the <MM/DD/YYYY> (you can also just put '21' for the year)", inline=False)
+    await ctx.send(embed=embed)
+@help.command()
+@commands.has_role("Leadership")
+async def quote(ctx):
+    embed = discord.Embed(
+        title = "Quote",
+        description = "Save any message anyone sends"
+    )
+    embed.add_field(name="**Syntax**", value="bf!quote <message-id>")
+    embed.add_field(name="**message-id**", value="To get a message's 'message-id', you must be in developer mode and then right click on the message and click 'Copy ID'", inline=False)
     await ctx.send(embed=embed)
 
 # im keeping this
