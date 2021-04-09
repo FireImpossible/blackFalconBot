@@ -455,42 +455,42 @@ async def gm_message():
                     channelname.append(channel.name) #gets channel name
             await client.get_channel(text_channel_list[channelname.index("bot-spam")].id).send(message) #we've connected to DISCORD!!!!
 
-async def message_send(guild, channel_name, message):
+async def message_send(guild, row, channel_name, message):
     text_channel_list = []
     channelname = []
+
+    for g in client.guilds:
+        if g.name == guild:
+            guild = g
     for channel in guild.channels: #getting all channels in the servers
         if str(channel.type).lower() == 'text': #if it's a text channel
             text_channel_list.append(channel) #gets actual channel
             channelname.append(channel.name) #gets channel name
-    await client.get_channel(text_channel_list[channelname.index(channel_name)].id).send(message) #we've connected to DISCORD!!!!
+    # check if still send message
+    cur.execute("SELECT * FROM announcements")
+    s = cur.fetchall()
+    for x in s:
+        if row in x:
+            await client.get_channel(text_channel_list[channelname.index(channel_name)].id).send(message) #we've connected to DISCORD!!!!
+            cur.execute("DELETE FROM announcements WHERE id = %s", (row,))
+            conn.commit()
+            break
 
 ##get data...
-async def sched_message(row, message, time_dif):
-    await asyncio.sleep(time_dif)
+async def sched_message(row, message, time_dif, guild):
+    await asyncio.sleep(float(time_dif))
+    await message_send(guild, row, "getting-rank", message)
 
-    for guild in client.guilds:
-            text_channel_list = []
-            channelname = []
-            for channel in guild.channels: #getting all channels in the servers
-                if str(channel.type).lower() == 'text': #if it's a text channel
-                    text_channel_list.append(channel) #gets actual channel
-                    channelname.append(channel.name) #gets channel name
-            await client.get_channel(text_channel_list[channelname.index("getting-rank")].id).send(message) #we've connected to DISCORD!!!!
-    cur.execute("ROLLBACK")
-    cur.execute("DELETE FROM announcements WHERE id = %s", (row,))
-
-cur.execute("INSERT INTO announcements (datetime, message) VALUES(%s, %s)", ("2021-04-07 20:13", "pls work my guy"))
-
+# schedules all of the announcements when bot reloads
 cur.execute("SELECT * FROM announcements")
 announce = cur.fetchall()
-print(announce)
 for announcemented in announce:
     my_date = convertDateTime(announcemented[1])
     seconds = (my_date - datetime.datetime.now()).total_seconds()
     my_id = announcemented[0]
     if seconds > 0:
         my_message = announcemented[2]
-        client.loop.create_task(sched_message(my_id, my_message, seconds))
+        client.loop.create_task(sched_message(my_id, my_message, seconds, announcemented[3]))
     else:
         cur.execute("ROLLBACK")
         cur.execute("DELETE FROM announcements WHERE id = %s", (my_id,))
