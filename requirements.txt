@@ -5,5 +5,3 @@ bs4
 psycopg2
 datetime
 asyncio
-pytz
-tzlocal
