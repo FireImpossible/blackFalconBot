@@ -27,6 +27,8 @@ client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=inten
 
 LOG_CHANNEL_ID = 829697432534122546
 
+time_zone = 4
+
 # bot starts
 @client.event
 async def on_ready():
@@ -235,7 +237,7 @@ async def schedule(ctx, *args):
             return
     if int(time[0]) == 12: time_string = f"{time[0]}:{time[1]} pm"
     elif int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
-    my_time = my_time + datetime.timedelta(hours=4)
+    my_time = my_time + datetime.timedelta(hours=time_zone)
     today = datetime.datetime.now()
     countdown = my_time - today
     if countdown.total_seconds() < 0: return
@@ -402,7 +404,7 @@ async def gm_message():
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies', 'time for yall eggies to get cracking', 'wake up late and youre falcon bait', 'rise and shine or they will dine', 'if youre not awake youll be baked', 'sleep is canceled so you dont get scrambled']
 
-    right_now = datetime.datetime.now() - datetime.timedelta(hours=4)
+    right_now = datetime.datetime.now() - datetime.timedelta(hours=time_zone)
     hour = right_now.hour
     second = right_now.second
     minute = right_now.minute
@@ -424,7 +426,7 @@ async def gm_message():
     await asyncio.sleep(time_dif)
 
     ##randomize a method
-    message = wakey_messages[random.randint(0, len(wakey_messages))]
+    message = wakey_messages[random.randint(0, (len(wakey_messages)-1))]
     
     for guild in client.guilds:
         text_channel_list = []
@@ -439,7 +441,7 @@ async def gm_message():
         await asyncio.sleep(86400)
 
         ##randomize a method
-        message = wakey_messages[random.randint(0, len(wakey_messages))]
+        message = wakey_messages[random.randint(0, (len(wakey_messages)-1))]
         
         for guild in client.guilds:
             text_channel_list = []
@@ -481,7 +483,7 @@ announce = cur.fetchall()
 print(announce)
 for announcemented in announce:
     my_date = announcemented[1]
-    seconds = (my_date + datetime.timedelta(hours=4) - datetime.datetime.now()).total_seconds()
+    seconds = (my_date + datetime.timedelta(hours=time_zone) - datetime.datetime.now()).total_seconds()
     my_id = announcemented[0]
     if seconds > 0:
         my_message = announcemented[2]
