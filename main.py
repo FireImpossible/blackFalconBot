@@ -455,5 +455,23 @@ for announcemented in announce:
 
 conn.commit()
 
+@client.command()
+async def quote(ctx, arg):
+    if ctx.message.author.id != 229248090786365443:
+        await ctx.message.delete()
+        return
+    try:
+        msg = await ctx.fetch_message(int(arg))
+    except:
+        return
+
+    embed = discord.Embed(
+        title="Quote"
+    )
+    embed.set_thumbnail(url=msg.author.avatar_url)
+    date_string = f"{msg.created_at.day} {msg.created_at.strftime('%B')} {msg.created_at.year}"
+    embed.add_field(name=msg.content, value=f"-- {msg.author.mention}, [{date_string}]({msg.jump_url})")
+    await ctx.message.delete()
+    await ctx.send(embed=embed)
 
 client.run(TOKEN)
