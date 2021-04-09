@@ -117,6 +117,8 @@ async def yeehaw(ctx):
 @client.command()
 async def ping(ctx):
     await ctx.reply("pong!")
+    if ctx.message.author.has_role("Leadership"):
+        await ctx.reply("AHHHHHH")
 
 @client.command()
 async def yeehaw(ctx):
