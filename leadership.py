@@ -25,13 +25,15 @@ async def announce(ctx, *args):
 
 
 def delete_scheduled(my_id):
-    message = "Announcement " + str(my_id) + " has been deleted"
-    try:
-        cur.execute("DELETE FROM announcements WHERE id = %s", (my_id,))
-    except:
+    cur.execute("SELECT * FROM announcements WHERE id = %s", (my_id,))
+    s = cur.fetchall()
+    if not s:
         message = "That message doesn't exist!"
+    else:
+        cur.execute("DELETE FROM announcements WHERE id = %s", (my_id,))
+        conn.commit()
+        message = "Announcement " + str(my_id) + " has been deleted"
     return message
-
 
 @client.command()
 @commands.has_role("botDev")
