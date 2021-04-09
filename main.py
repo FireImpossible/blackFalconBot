@@ -463,6 +463,7 @@ async def quote(ctx, arg):
     try:
         msg = await ctx.fetch_message(int(arg))
     except:
+        await ctx.send("failed here")
         return
 
     embed = discord.Embed(
