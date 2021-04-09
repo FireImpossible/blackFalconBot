@@ -474,5 +474,9 @@ async def quote(ctx, arg):
     embed.add_field(name=f'"{msg.content}"', value=f"-- {msg.author.mention}, [{date_string}]({msg.jump_url})")
     await ctx.message.delete()
     await ctx.send(embed=embed)
+    
+@client.command(name="8ball")
+async def _8ball(ctx):
+    await ctx.reply(random.choice(magic_ball_responses))
 
 client.run(TOKEN)
