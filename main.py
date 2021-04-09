@@ -461,7 +461,7 @@ async def quote(ctx, arg):
         await ctx.message.delete()
         return
     try:
-        msg = await ctx.fetch_message(int(arg))
+        msg = await ctx.guild.fetch_message(int(arg))
     except:
         await ctx.send("failed here")
         return
