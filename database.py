@@ -1,7 +1,7 @@
-DB_HOST = "ec2-50-16-108-41.compute-1.amazonaws.com"
-DB_NAME = "d89ra8pgoll1n0"
-DB_USER = "uqspjisevftviw"
-DB_PASS = "6d8061c79dabe16cf32c02eefa4a3757f5c25e0531ac6a4762d273130ee0f823"
+DB_HOST = os.getenv('DATABASE_URL')[91:133]
+DB_NAME = os.getenv('DATABASE_URL')[139:]
+DB_USER = os.getenv('DATABASE_URL')[11:25]
+DB_PASS = os.getenv('DATABASE_URL')[26:90]
 
 import psycopg2
 import psycopg2.extras
