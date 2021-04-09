@@ -1,7 +1,6 @@
 # bot.py
 ##wya...
-import discord
-from discord.ext import commands
+from bot import *
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
@@ -20,12 +19,6 @@ import os
 
 import random
 import datetime
-
-TOKEN = os.getenv('DISCORD_BOT_TOKEN')
-intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
-client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
-
-LOG_CHANNEL_ID = 829697432534122546
 
 #time_zone = 4
 #remove the time zone difference and implement convertDateTime()
@@ -516,8 +509,6 @@ async def quote(ctx, arg):
     await ctx.message.delete()
     await ctx.send(embed=embed)
     
-@client.command(name="8ball")
-async def _8ball(ctx):
-    await ctx.reply(random.choice(magic_ball_responses))
+
 
 client.run(TOKEN)
