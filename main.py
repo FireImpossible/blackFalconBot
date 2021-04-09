@@ -456,10 +456,8 @@ for announcemented in announce:
 conn.commit()
 
 @client.command()
+@commands.has_role("Leadership")
 async def quote(ctx, arg):
-    if ctx.message.author.id != 229248090786365443:
-        await ctx.message.delete()
-        return
     for channel in ctx.guild.channels:
         try:
             msg = await channel.fetch_message(int(arg))
