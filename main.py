@@ -190,7 +190,6 @@ def delete_scheduled(my_id):
 @client.command()
 @commands.has_role("Leadership")
 async def schedule(ctx, *args):
-    await ctx.send("I am alive lol")
     text = ""
     time_string = ""
     date = []
