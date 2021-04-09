@@ -16,11 +16,12 @@ from manage_timezones import *
 import psycopg2
 import datetime
 import asyncio
+import os
 
 import random
 import datetime
 
-TOKEN = 'ODI4MzEzNTcyODUyNDk4NDUy.YGnxIQ.glzmYv3KgWJeYlizZMASQi2fuQs'
+TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True, presences=True)
 client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=intents)
 
