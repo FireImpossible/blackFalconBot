@@ -5,7 +5,7 @@ import asyncio
 
 
 @client.command()
-@commands.has_role("Leadership")
+@commands.has_role("botDev")
 async def announce(ctx, *args):
     text = ""
     if not args:
@@ -35,7 +35,7 @@ def delete_scheduled(my_id):
 
 
 @client.command()
-@commands.has_role("Leadership")
+@commands.has_role("botDev")
 async def schedule(ctx, *args):
     text = ""
     time_string = ""
@@ -203,7 +203,7 @@ conn.commit()
 
 
 @client.command()
-@commands.has_role("Leadership")
+@commands.has_role("botDev")
 async def quote(ctx, arg):
     for channel in ctx.guild.channels:
         try:
