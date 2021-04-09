@@ -181,8 +181,7 @@ async def message_send(guild, row, channel_name, message):
     s = cur.fetchall()
     for x in s:
         if row in x:
-            await client.get_channel(text_channel_list[channelname.index(channel_name)].id).send(
-                message)  # we've connected to DISCORD!!!!
+            await client.get_channel(text_channel_list[channelname.index(channel_name)].id).send(message)  # we've connected to DISCORD!!!!
             cur.execute("DELETE FROM announcements WHERE id = %s", (row,))
             conn.commit()
             break
