@@ -1,9 +1,10 @@
+import os
+
 DB_HOST = os.getenv('DATABASE_URL')[91:133]
 DB_NAME = os.getenv('DATABASE_URL')[139:]
 DB_USER = os.getenv('DATABASE_URL')[11:25]
 DB_PASS = os.getenv('DATABASE_URL')[26:90]
 
-import os
 import psycopg2
 import psycopg2.extras
 
