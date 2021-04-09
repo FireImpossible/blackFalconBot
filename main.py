@@ -237,15 +237,18 @@ async def schedule(ctx, *args):
             return
     if int(time[0]) == 12: time_string = f"{time[0]}:{time[1]} pm"
     elif int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
+    write_time = my_time
     my_time = convertDateTime(my_time)
     today = datetime.datetime.now()
     countdown = my_time - today
-    if countdown.total_seconds() < 0: return
+    if countdown.total_seconds() < 0: 
+        await ctx.send("Your time has already passed, change it to a time in the future")
+        return
     # messages
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     await client.get_channel(LOG_CHANNEL_ID).send(f"{ctx.message.author} scheduled the following message for {date[0]}/{date[1]}/{date[2]} at {time_string}:\n**{text}**")
     # put it into the database
-    cur.execute("INSERT INTO announcements (datetime, message, guildName) VALUES(%s, %s, %s)", (my_time, text, str(ctx.guild)))
+    cur.execute("INSERT INTO announcements (datetime, message, guildName) VALUES(%s, %s, %s)", (write_time, text, str(ctx.guild)))
     conn.commit()
     # get the id
     cur.execute("SELECT * FROM announcements")
