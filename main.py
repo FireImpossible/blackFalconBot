@@ -461,7 +461,7 @@ async def quote(ctx, arg):
         await ctx.message.delete()
         return
     try:
-        msg = await ctx.guild.fetch_message(int(arg))
+        msg = await ctx.message.guild.fetch_message(int(arg))
     except:
         await ctx.send("failed here")
         return
@@ -471,7 +471,7 @@ async def quote(ctx, arg):
     )
     embed.set_thumbnail(url=msg.author.avatar_url)
     date_string = f"{msg.created_at.day} {msg.created_at.strftime('%B')} {msg.created_at.year}"
-    embed.add_field(name=msg.content, value=f"-- {msg.author.mention}, [{date_string}]({msg.jump_url})")
+    embed.add_field(name=f'"{msg.content}"', value=f"-- {msg.author.mention}, [{date_string}]({msg.jump_url})")
     await ctx.message.delete()
     await ctx.send(embed=embed)
 
