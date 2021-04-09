@@ -26,8 +26,8 @@ client = commands.Bot(command_prefix=['bf!', 'Bf!', 'bF!', 'BF!'], intents=inten
 
 LOG_CHANNEL_ID = 829697432534122546
 
-time_zone = 4
-
+#time_zone = 4
+#remove the time zone difference and implement convertDateTime()
 # bot starts
 @client.event
 async def on_ready():
@@ -237,7 +237,7 @@ async def schedule(ctx, *args):
             return
     if int(time[0]) == 12: time_string = f"{time[0]}:{time[1]} pm"
     elif int(time[0]) > 12: time_string = f"{(int(time[0]) - 12)}:{time[1]} pm"
-    my_time = my_time + datetime.timedelta(hours=time_zone)
+    my_time = convertDateTime(my_time)
     today = datetime.datetime.now()
     countdown = my_time - today
     if countdown.total_seconds() < 0: return
@@ -404,7 +404,7 @@ async def gm_message():
 
     wakey_messages = ['early birdies get the wormies', 'wake up eggies, stretch your leggies', "get up hatchlings or you'll need patchlings", 'come on falcons, make some palcons', 'leave the nest, or youll have nothing left', 'wakey wakey eggs and bakey', 'get out of beddies if youre not deddies', 'time for yall eggies to get cracking', 'wake up late and youre falcon bait', 'rise and shine or they will dine', 'if youre not awake youll be baked', 'sleep is canceled so you dont get scrambled']
 
-    right_now = datetime.datetime.now() - datetime.timedelta(hours=time_zone)
+    right_now = datetime.datetime.now()# - datetime.timedelta(hours=time_zone) remove this to implement autotimezone
     hour = right_now.hour
     second = right_now.second
     minute = right_now.minute
@@ -416,7 +416,7 @@ async def gm_message():
         time_dif = 0
         return False
     elif hour <= message_hour:
-        time_dif = (datetime.datetime(2021, month, day, message_hour, message_minute, 0) - datetime.datetime(2021, month, day, hour, minute, second)).total_seconds()
+        time_dif = (convertDateTime(datetime.datetime(2021, month, day, message_hour, message_minute, 0)) - datetime.datetime(2021, month, day, hour, minute, second)).total_seconds()
         ##schedule for those secs
     else:
         ##how long has passed since 8 am
@@ -482,8 +482,8 @@ cur.execute("SELECT * FROM announcements")
 announce = cur.fetchall()
 print(announce)
 for announcemented in announce:
-    my_date = announcemented[1]
-    seconds = (my_date + datetime.timedelta(hours=time_zone) - datetime.datetime.now()).total_seconds()
+    my_date = convertDateTime(announcemented[1])
+    seconds = (my_date - datetime.datetime.now()).total_seconds()
     my_id = announcemented[0]
     if seconds > 0:
         my_message = announcemented[2]
