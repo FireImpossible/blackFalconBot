@@ -11,6 +11,7 @@ import time
 from soup_functions import * #look i can write tho
 from database import *
 from badWords import bad_words
+from magicBall import *
 
 import psycopg2
 import datetime
@@ -74,7 +75,11 @@ async def help(ctx):
     embed.add_field(name="**comp**", value="competition dates")
     embed.add_field(name="**cisco**", value="PT modules")
     embed.add_field(name="**yeehaw**", value="cowboy")
-    
+    for x in ctx.message.author.roles:
+        if "Leadership" in str(x):
+            embed.add_field(name="**announce**", value="say something to everyone")
+            embed.add_field(name="**schedule**", value="schedule an announcement")
+            embed.add_field(name="**quote**", value="if someone says something stupid, save it")
     await ctx.send(embed=embed)
 @help.command()
 async def ping(ctx):
@@ -106,16 +111,48 @@ async def cisco(ctx):
 @help.command()
 async def yeehaw(ctx):
     embed = discord.Embed(
-        name = "Yeehaw",
-        description = "Cowboy \:abelpog:"
+        title = "Yeehaw",
+        description = "Cowboy <:abelpog:824676945639243812>"
     )
     embed.add_field(name="**Syntax**", value="bf!yeehaw")
+    await ctx.send(embed=embed)
+@help.command()
+@commands.has_role("Leadership")
+async def announce(ctx):
+    embed = discord.Embed(
+        title = "Announce",
+        description = "Send a message to the random announcement channel"
+    )
+    embed.add_field(name="**Syntax**", value="bf!announce <message>")
+    await ctx.send(embed=embed)
+@help.command()
+@commands.has_role("Leadership")
+async def schedule(ctx):
+    embed = discord.Embed(
+        title = "Schedule",
+        description = "Schedule an announcement to happen at a later time, or date"
+    )
+    embed.add_field(name="**Syntax**", value="bf!schedule <date> <time> <message>")
+    embed.add_field(name="**Date**", value="There always has to be a date, even if you just want to send it later that day.\n" +
+                                           "The date has to be in the <MM/DD/YYYY> (you can also just put '21' for the year)", inline=False)
+    await ctx.send(embed=embed)
+@help.command()
+@commands.has_role("Leadership")
+async def quote(ctx):
+    embed = discord.Embed(
+        title = "Quote",
+        description = "Save any message anyone sends"
+    )
+    embed.add_field(name="**Syntax**", value="bf!quote <message-id>")
+    embed.add_field(name="**message-id**", value="To get a message's 'message-id', you must be in developer mode and then right click on the message and click 'Copy ID'", inline=False)
     await ctx.send(embed=embed)
 
 # im keeping this
 @client.command()
 async def ping(ctx):
     await ctx.reply("pong!")
+    if ctx.message.author.has_role("Leadership"):
+        await ctx.reply("AHHHHHH")
 
 @client.command()
 async def yeehaw(ctx):
@@ -139,6 +176,15 @@ async def announce(ctx, *args):
             channelname.append(channel.name) #gets channel name
     await client.get_channel(text_channel_list[channelname.index("random-announcement-channel")].id).send(f"@everyone \n" + text) #we've connected to DISCORD!!!!
 
+def delete_scheduled(my_id):
+    message = "Announcement " + str(my_id) + " has been deleted"
+    try: 
+        cur.execute("DELETE FROM announcements WHERE id = %s", (my_id,))
+    except:
+        message = "That message doesn't exist!" 
+    return message
+
+
 @client.command()
 @commands.has_role("Leadership")
 async def schedule(ctx, *args):
@@ -148,8 +194,20 @@ async def schedule(ctx, *args):
     time = []
     if not args: return
     elif args[0] == 'show':
-        await ctx.send(embed=get_scheduled(ctx.guild))
+        my_page = 1
+        try:
+            my_page = int(args[1])
+        except:
+            my_page = 1
+        await ctx.send(embed=get_scheduled(ctx.guild, my_page))
         return
+    elif args[0] == 'delete':
+        delete_id = 0
+        try:
+            delete_id = int(args[1])
+        except:
+            delete_id = 0
+        await ctx.send(delete_scheduled(delete_id))
     else:
         try:
             date = args[0].split("/")
@@ -185,7 +243,7 @@ async def schedule(ctx, *args):
     await ctx.send(f"Scheduled the message for {date[0]}/{date[1]}/{date[2]} at {time_string}")
     await client.get_channel(LOG_CHANNEL_ID).send(f"{ctx.message.author} scheduled the following message for {date[0]}/{date[1]}/{date[2]} at {time_string}:\n**{text}**")
     # put it into the database
-    cur.execute("INSERT INTO announcements (datetime, message, guildName) VALUES(%s, %s, %s)", (my_time, text, str(ctx.guild))
+    cur.execute("INSERT INTO announcements (datetime, message, guildName) VALUES(%s, %s, %s)", (my_time, text, str(ctx.guild)))
     conn.commit()
     # get the id
     cur.execute("SELECT * FROM announcements")
@@ -199,7 +257,7 @@ async def schedule(ctx, *args):
     cur.execute("DELETE FROM announcements WHERE id = %s", (message_id,))
     conn.commit()
 
-def get_scheduled(guild):
+def get_scheduled(guild, page):
 
     cur.execute("SELECT * FROM announcements WHERE guildName = %s", (str(guild),))
     announce = cur.fetchall()
@@ -207,17 +265,31 @@ def get_scheduled(guild):
     sched_embed = discord.Embed(
         title=f"Scheduled Announcements:"
     )
-    page_num = 0
-    #competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
-    sched_embed.set_footer(text=f"Viewing page {page_num}.")
     
-    for announcemented in announce:
+
+    max_pages = round(len(announce) / 10)
+
+    if (page > max_pages): page = max_pages
+    #competition_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
+    sched_embed.set_footer(text=f"Viewing page {page + 1} out of {max_pages + 1}.")   
+
+    page_start = (page) * 10
+    page_end = page_start + 9
+
+    if(page == max_pages):
+        page_end = len(announce)
+
+    for x in range(page_start, page_end):
+        announcemented = announce[x]
         my_id = announcemented[0]
         my_date = str(announcemented[1])
         my_message = announcemented[2]
 
         schedule_shower = my_message + " scheduled for " + my_date
         sched_embed.add_field(name=my_id, value=schedule_shower, inline=False)
+
+    #for announcemented in announce:
+        
         
     ##deal with pages later....
     # # get args length
@@ -420,5 +492,27 @@ for announcemented in announce:
 
 conn.commit()
 
+@client.command()
+@commands.has_role("Leadership")
+async def quote(ctx, arg):
+    for channel in ctx.guild.channels:
+        try:
+            msg = await channel.fetch_message(int(arg))
+            break
+        except:
+            pass
+
+    embed = discord.Embed(
+        title="Quote"
+    )
+    embed.set_thumbnail(url=msg.author.avatar_url)
+    date_string = f"{msg.created_at.day} {msg.created_at.strftime('%B')} {msg.created_at.year}"
+    embed.add_field(name=f'"{msg.content}"', value=f"-- {msg.author.mention}, [{date_string}]({msg.jump_url})")
+    await ctx.message.delete()
+    await ctx.send(embed=embed)
+    
+@client.command(name="8ball")
+async def _8ball(ctx):
+    await ctx.reply(random.choice(magic_ball_responses))
 
 client.run(TOKEN)
