@@ -21,8 +21,7 @@ async def announce(ctx, *args):
         if str(channel.type).lower() == 'text':  # if it's a text channel
             text_channel_list.append(channel)  # gets actual channel
             channelname.append(channel.name)  # gets channel name
-    await client.get_channel(text_channel_list[channelname.index("random-announcement-channel")].id).send(
-        f"@everyone \n" + text)  # we've connected to DISCORD!!!!
+    await client.get_channel(text_channel_list[channelname.index("random-announcement-channel")].id).send(text) # we've connected to DISCORD!!!!
 
 
 def delete_scheduled(my_id):
