@@ -460,11 +460,12 @@ async def quote(ctx, arg):
     if ctx.message.author.id != 229248090786365443:
         await ctx.message.delete()
         return
-    try:
-        msg = await ctx.message.guild.fetch_message(int(arg))
-    except:
-        await ctx.send("failed here")
-        return
+    for channel in ctx.guild.channels:
+        try:
+            msg = await channel.fetch_message(int(arg))
+            break
+        except:
+            pass
 
     embed = discord.Embed(
         title="Quote"
