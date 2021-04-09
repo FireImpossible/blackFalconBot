@@ -16,7 +16,6 @@ from magicBall import *
 import psycopg2
 import datetime
 import asyncio
-from pytz import timezone
 
 import random
 import datetime
