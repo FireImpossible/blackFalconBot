@@ -9,4 +9,5 @@ Set the device hostname to [bfun times with friends],hostname bfun times with fr
 Enable password encryption,service password-encryption,PT
 Enable switchport security,switchport port-security,PT
 Allow a maximum of 2 secure MAC addresses,switchport port-security maximum 2,PT
-
+Allow a maximum of 2 secure MAC addresses,switchport port-security maximum 2,PT
+How do access local user and group management using Run?,lusrmgr,Windows
