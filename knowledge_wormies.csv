@@ -1,7 +1,12 @@
-﻿Question,Answer,OS
+Question,Answer,OS
 How do you enable a firewall in the Ubuntu terminal?,sudo ufw enable,Ubuntu
 Where do you change PermitRootLogin?,c/ssh/sshd_config,Ubuntu
 To disable the root user set PermitRootLogin to [yes/no],no,Ubuntu
 Where do you disable the guest user?,/etc/lightdm/lightdm.conf,Ubuntu
-What line disables the guest user?,allow-guest=false,
+What line disables the guest user?,allow-guest=false,Ubuntu
 What is the subnet for a /24 network?,255.255.255.0,PT
+Set the device hostname to [bfun times with friends],hostname bfun times with friends,PT
+Enable password encryption,service password-encryption,PT
+Enable switchport security,switchport port-security,PT
+Allow a maximum of 2 secure MAC addresses,switchport port-security maximum 2,PT
+
