@@ -35,7 +35,7 @@ async def gofish(ctx):
     # file = discord.File("path/to/image/file.png", filename="image.png")
     # fish_embed.set_image(url=f"fish_pics://{rand_pic}.png")
     fish_link = "[all about the " + rand_fish + "](https://fishingbooker.com/fish/" + rand_pic + ")"
-    fish_embed.add_field(name="learn more!", value="", inline=False)
+    fish_embed.add_field(name="learn more!", value=fish_link, inline=False)
     fish_embed.set_image(
         url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
     await ctx.reply(embed=fish_embed)
