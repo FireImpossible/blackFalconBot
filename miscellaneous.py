@@ -25,6 +25,7 @@ async def yeehaw(ctx):
 
 @client.command()
 async def gofish(ctx):
+    #### CHECK IF USER HAS A WORM
     rand_num = random.randint(0, (len(fish_names) - 1))
     rand_fish = fish_names[rand_num]
     rand_pic = fish_img[rand_num]
@@ -40,40 +41,40 @@ async def gofish(ctx):
     fish_embed.set_image(
         url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
     await ctx.reply(embed=fish_embed)
+    #### DELETE ONE WORM FROM THE USER'S DATA BASE
+    #### SAVE FISH TO USER'S DATABASE
 
 client.in_session = False
 @client.command()
 async def wormie(ctx, *args):
-    ubuntu = ["Ubuntu", "ubuntu", "u", "ub"]
-    windows = ["Windows", "windows", "w", "win", "Win"]
+
+    ubuntu = ["Ubuntu", "ubuntu", "u"]
+    windows = ["Windows", "windows", "w"]
     pt = ["PT", "pt", "cisco", "packet", "Packet", "Cisco"]
-    
     if not client.in_session:
+        client.in_session = True
+
         ##did the user specify an operating system?
         user_os = ""
         if args:
-            my_input = str(args[0])
-            if my_input in ubuntu:
+            if args[0] in ubuntu:
                 user_os = "Ubuntu"
-            elif my_input in pt:
+            elif args[0] in pt:
                 user_os = "PT"
-            elif my_input in windows:
+            elif args[0] in windows:
                 user_os = "Windows"
             else:
                 pass
         
-        client.in_session = True
+        ##start question asking
         question = ""
         answer = ""
         worm_os = ""
 
+        ###generate worm question
         all_wormies = []
         with open('knowledge_wormies.csv', newline='') as csvfile:
             all_wormies = list(csv.reader(csvfile))
-
-        # file = open("knowledge_wormies.csv")
-        # reader = csv.reader(file)
-        # lines= len(list(reader))
         
         rand_worm = random.randint(1, (len(all_wormies) - 1))
         row = all_wormies[rand_worm]
@@ -89,22 +90,7 @@ async def wormie(ctx, *args):
         question = row[0]
         answer = row[1]
 
-        # with open('knowledge_wormies.csv') as csv_file:
-            
-        #     csv_reader = csv.reader(csv_file, delimiter=',')
-        #     rand_worm = random.randint(1, (len(csv_reader) - 1))
-        #     line_count = 0
-
-        #     row = csv_reader[rand_worm]
-        #     if line_count == 0:
-        #         # print(f'Column names are {", ".join(row)}')
-        #         # line_count += 1
-        #         line_count+=1
-        #     else:
-        #         question = row[0]
-        #         answer = row[1]
-        #         worm_os = row[2]
-
+        ##ask the user the worm question
         question_embed = discord.Embed(
             title=f"Answer correctly and get a worm!"
         )   
@@ -115,11 +101,14 @@ async def wormie(ctx, *args):
 
         my_answer = ""
         while my_answer != answer and my_answer != "quit":
-            my_response = await client.wait_for("message")
-            my_answer = my_response.content.lower()
+            #my_response = await client.wait_for("message")
+            msg = await client.wait_for('message', check=lambda message: message.author == ctx.author)
+            my_answer = msg.content.lower()
+            #my_user = my_response.use
             if my_answer == answer:
                 await ctx.reply('you get one knowledge wormie! :worm:')
                 client.in_session = False
+                ####GIVE USER WHO ANSWERED THE QUESTION CORRECTLY A WORM
             elif my_answer == "quit":
                 await ctx.reply('better luck next time \🐟')
                 client.in_session = False
