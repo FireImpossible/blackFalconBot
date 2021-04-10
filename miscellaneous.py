@@ -28,10 +28,14 @@ async def gofish(ctx):
     rand_fish = fish_names[rand_num]
     rand_pic = fish_img[rand_num]
     fish_embed = discord.Embed(
-        title=f"You caught a {rand_fish}"
+        title=f"You caught a {rand_fish} \✨"
     )
+    if rand_fish == "Crappie" or rand_fish == "Weakfish":
+      fish_embed.add_field(name="please be kind", value="all fish can become a catch with your love and support \🥰", inline=False)
     # file = discord.File("path/to/image/file.png", filename="image.png")
     # fish_embed.set_image(url=f"fish_pics://{rand_pic}.png")
-    fish_embed.set_thumbnail(
+    fish_link = "[all about the " + rand_fish + "](https://fishingbooker.com/fish/" + rand_pic + ")"
+    fish_embed.add_field(name="learn more!", value="", inline=False)
+    fish_embed.set_image(
         url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
     await ctx.reply(embed=fish_embed)
