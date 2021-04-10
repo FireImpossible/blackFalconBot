@@ -44,18 +44,20 @@ async def gofish(ctx):
 client.in_session = False
 @client.command()
 async def wormie(ctx, *args):
-    ubuntu = ["Ubuntu", "ubuntu", "u"]
-    windows = ["Windows", "windows", "w"]
+    ubuntu = ["Ubuntu", "ubuntu", "u", "ub"]
+    windows = ["Windows", "windows", "w", "win", "Win"]
     pt = ["PT", "pt", "cisco", "packet", "Packet", "Cisco"]
+    
     if not client.in_session:
         ##did the user specify an operating system?
         user_os = ""
         if args:
-            if args[0] in ubuntu:
+            my_input = str(args[0])
+            if my_input in ubuntu:
                 user_os = "Ubuntu"
-            elif args[0] in pt:
+            elif my_input in pt:
                 user_os = "PT"
-            elif args[0] in windows:
+            elif my_input in windows:
                 user_os = "Windows"
             else:
                 pass
