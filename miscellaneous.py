@@ -41,61 +41,67 @@ async def gofish(ctx):
         url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
     await ctx.reply(embed=fish_embed)
 
+client.in_session = False
 @client.command()
 async def wormie(ctx):
-    question = ""
-    answer = ""
-    worm_os = ""
+    #client.in_session = client.in_session
+    if not client.in_session:
+        client.in_session = True
+        question = ""
+        answer = ""
+        worm_os = ""
 
-    all_wormies = []
-    with open('knowledge_wormies.csv', newline='') as csvfile:
-        all_wormies = list(csv.reader(csvfile))
+        all_wormies = []
+        with open('knowledge_wormies.csv', newline='') as csvfile:
+            all_wormies = list(csv.reader(csvfile))
 
-    # file = open("knowledge_wormies.csv")
-    # reader = csv.reader(file)
-    # lines= len(list(reader))
+        # file = open("knowledge_wormies.csv")
+        # reader = csv.reader(file)
+        # lines= len(list(reader))
 
-    rand_worm = random.randint(1, (len(all_wormies) - 1))
-    line_count = 0
+        rand_worm = random.randint(1, (len(all_wormies) - 1))
+        line_count = 0
 
-    row = all_wormies[rand_worm]
-    
-   
-    question = row[0]
-    answer = row[1]
-    worm_os = row[2]
-
-    # with open('knowledge_wormies.csv') as csv_file:
+        row = all_wormies[rand_worm]
         
-    #     csv_reader = csv.reader(csv_file, delimiter=',')
-    #     rand_worm = random.randint(1, (len(csv_reader) - 1))
-    #     line_count = 0
+    
+        question = row[0]
+        answer = row[1]
+        worm_os = row[2]
 
-    #     row = csv_reader[rand_worm]
-    #     if line_count == 0:
-    #         # print(f'Column names are {", ".join(row)}')
-    #         # line_count += 1
-    #         line_count+=1
-    #     else:
-    #         question = row[0]
-    #         answer = row[1]
-    #         worm_os = row[2]
+        # with open('knowledge_wormies.csv') as csv_file:
+            
+        #     csv_reader = csv.reader(csv_file, delimiter=',')
+        #     rand_worm = random.randint(1, (len(csv_reader) - 1))
+        #     line_count = 0
 
-    question_embed = discord.Embed(
-        title=f"Answer correctly and get a worm!"
-    )   
-    question_embed.set_thumbnail(
-        url="https://icon-library.com/images/worm-icon/worm-icon-9.jpg")
-    question_embed.add_field(name=worm_os, value=question, inline=False)
-    await ctx.reply(embed=question_embed)
+        #     row = csv_reader[rand_worm]
+        #     if line_count == 0:
+        #         # print(f'Column names are {", ".join(row)}')
+        #         # line_count += 1
+        #         line_count+=1
+        #     else:
+        #         question = row[0]
+        #         answer = row[1]
+        #         worm_os = row[2]
 
-    my_answer = ""
-    while my_answer != answer and my_answer != "quit":
-        my_response = await client.wait_for("message")
-        my_answer = my_response.content.lower()
-        if my_answer == answer:
-            await ctx.reply('you get one knowledge wormie! :worm:')
-        elif my_answer == "quit":
-            await ctx.reply('better luck next time \🐟')
-        else:
-            await ctx.reply('quit or try again \✨')
+        question_embed = discord.Embed(
+            title=f"Answer correctly and get a worm!"
+        )   
+        question_embed.set_thumbnail(
+            url="https://icon-library.com/images/worm-icon/worm-icon-9.jpg")
+        question_embed.add_field(name=worm_os, value=question, inline=False)
+        await ctx.reply(embed=question_embed)
+
+        my_answer = ""
+        while my_answer != answer and my_answer != "quit":
+            my_response = await client.wait_for("message")
+            my_answer = my_response.content.lower()
+            if my_answer == answer:
+                await ctx.reply('you get one knowledge wormie! :worm:')
+                client.in_session = False
+            elif my_answer == "quit":
+                await ctx.reply('better luck next time \🐟')
+                client.in_session = False
+            else:
+                await ctx.reply('quit or try again \✨')
