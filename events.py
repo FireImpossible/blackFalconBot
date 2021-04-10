@@ -10,8 +10,7 @@ from manage_timezones import convertDateTime
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-    user=await client.get_user_info(324362342026444800)
-    await client.send_message(user, "hola senior")
+    await client.send_message(client.get_user_info(324362342026444800), "hola senior")
     # thien's thing:
     for guild in client.guilds:
         print(guild.name)
