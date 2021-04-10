@@ -43,9 +43,23 @@ async def gofish(ctx):
 
 client.in_session = False
 @client.command()
-async def wormie(ctx):
-    #client.in_session = client.in_session
+async def wormie(ctx, *args):
+    ubuntu = ["Ubuntu", "ubuntu", "u"]
+    windows = ["Windows", "windows", "w"]
+    pt = ["PT", "pt", "cisco", "packet", "Packet", "Cisco"]
     if not client.in_session:
+        ##did the user specify an operating system?
+        user_os = ""
+        if args:
+            if args[0] in ubuntu:
+                user_os = "Ubuntu"
+            elif args[0] in pt:
+                user_os = "PT"
+            elif args[0] in windows:
+                user_os = "Windows"
+            else:
+                pass
+        
         client.in_session = True
         question = ""
         answer = ""
@@ -58,16 +72,20 @@ async def wormie(ctx):
         # file = open("knowledge_wormies.csv")
         # reader = csv.reader(file)
         # lines= len(list(reader))
-
-        rand_worm = random.randint(1, (len(all_wormies) - 1))
-        line_count = 0
-
-        row = all_wormies[rand_worm]
         
-    
+        rand_worm = random.randint(1, (len(all_wormies) - 1))
+        row = all_wormies[rand_worm]
+        worm_os = row[2]
+
+        if not user_os == "":
+            while user_os != worm_os:
+                rand_worm = random.randint(1, (len(all_wormies) - 1))
+                row = all_wormies[rand_worm]
+                worm_os = row[2]
+                
+            
         question = row[0]
         answer = row[1]
-        worm_os = row[2]
 
         # with open('knowledge_wormies.csv') as csv_file:
             
