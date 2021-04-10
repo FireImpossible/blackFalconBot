@@ -1,6 +1,7 @@
 from bot import *
 import random
 from fish import *
+import csv
 
 magic_ball_responses = ["As I see it, yes.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.",
              "Don’t count on it.", "It is certain.", "It is decidedly so.", "Most likely.", "My reply is no.", "My sources say no.",
@@ -39,3 +40,62 @@ async def gofish(ctx):
     fish_embed.set_image(
         url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
     await ctx.reply(embed=fish_embed)
+
+@client.command()
+async def wormie(ctx):
+    question = ""
+    answer = ""
+    worm_os = ""
+
+    all_wormies = []
+    with open('knowledge_wormies.csv', newline='') as csvfile:
+        all_wormies = list(csv.reader(csvfile))
+
+    # file = open("knowledge_wormies.csv")
+    # reader = csv.reader(file)
+    # lines= len(list(reader))
+
+    rand_worm = random.randint(1, (len(all_wormies) - 1))
+    line_count = 0
+
+    row = all_wormies[rand_worm]
+    
+   
+    question = row[0]
+    answer = row[1]
+    worm_os = row[2]
+
+    # with open('knowledge_wormies.csv') as csv_file:
+        
+    #     csv_reader = csv.reader(csv_file, delimiter=',')
+    #     rand_worm = random.randint(1, (len(csv_reader) - 1))
+    #     line_count = 0
+
+    #     row = csv_reader[rand_worm]
+    #     if line_count == 0:
+    #         # print(f'Column names are {", ".join(row)}')
+    #         # line_count += 1
+    #         line_count+=1
+    #     else:
+    #         question = row[0]
+    #         answer = row[1]
+    #         worm_os = row[2]
+
+    question_embed = discord.Embed(
+        title=f"Answer correctly and get a worm!"
+    )   
+    question_embed.set_thumbnail(
+        url="https://icon-library.com/images/worm-icon/worm-icon-9.jpg")
+    question_embed.add_field(name=worm_os, value=question, inline=False)
+    await ctx.reply(embed=question_embed)
+
+    my_answer = ""
+    while my_answer != answer and my_answer != "quit":
+        my_response = await client.wait_for("message")
+        my_answer = my_response.content.lower()
+        if my_answer == answer:
+            await ctx.reply('you get one knowledge wormie! :worm:')
+        elif my_answer == "quit":
+            await ctx.reply('better luck next time \🐟')
+        else:
+            await ctx.reply('quit or try again \✨')
