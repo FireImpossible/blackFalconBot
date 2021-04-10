@@ -10,8 +10,7 @@ from manage_timezones import convertDateTime
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-
-    # thien's thing:
+    # thien's thing: editing this is painful
     for guild in client.guilds:
         print(guild.name)
         text_channel_list = []
