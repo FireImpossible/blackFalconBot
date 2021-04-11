@@ -9,6 +9,13 @@ magic_ball_responses = ["As I see it, yes.", "Ask again later.", "Better not tel
              "Yes.", "Yes – definitely.", "You may rely on it."]
 
 
+fishing = {
+    'mollyyan': {
+        'fish': ['Crappie', 'Weakfish'],
+        'worms': 500
+    }
+}
+
 @client.command(name="8ball")
 async def _8ball(ctx):
     await ctx.reply(random.choice(magic_ball_responses))
@@ -25,7 +32,13 @@ async def yeehaw(ctx):
 
 @client.command()
 async def gofish(ctx):
+
     #### CHECK IF USER HAS A WORM
+    ##get id of user that sent message
+    ##select the row from the database
+    ##get worm count
+    ##if worm count > 0, run this
+
     rand_num = random.randint(0, (len(fish_names) - 1))
     rand_fish = fish_names[rand_num]
     rand_pic = fish_img[rand_num]
@@ -34,15 +47,25 @@ async def gofish(ctx):
     )
     if rand_fish == "Crappie" or rand_fish == "Weakfish":
       fish_embed.add_field(name="please be kind", value="all fish can become a catch with your love and support \🥰", inline=False)
-    # file = discord.File("path/to/image/file.png", filename="image.png")
-    # fish_embed.set_image(url=f"fish_pics://{rand_pic}.png")
     fish_link = "[all about the " + rand_fish + "](https://fishingbooker.com/fish/" + rand_pic + ")"
     fish_embed.add_field(name="learn more!", value=fish_link, inline=False)
     fish_embed.set_image(
         url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
     await ctx.reply(embed=fish_embed)
+
     #### DELETE ONE WORM FROM THE USER'S DATA BASE
+    ##worm count - 1
+    ##update user data base
+
     #### SAVE FISH TO USER'S DATABASE
+    ##get array of fish
+    ##get array of fish counts
+    ##check if fish exist in array
+    ##if exist
+        ##add 1 to the corresponding fish counts index
+    ##if not exist
+        ##append fish name
+        ##append 1 to fish count
 
 client.in_session = False
 @client.command()
@@ -103,14 +126,47 @@ async def wormie(ctx, *args):
         while my_answer != answer and my_answer != "quit":
             #my_response = await client.wait_for("message")
             msg = await client.wait_for('message', check=lambda message: message.author == ctx.author)
+            
             my_answer = msg.content.lower()
             #my_user = my_response.use
             if my_answer == answer:
+                # user_data = fishing['mollyyan']
+                # worm_count = user_data['worms'] 
+                # user_data['worms'] = worm_count + 1
+                # worm_count = user_data['worms']
+
+                # print(ctx.author.id)
+                ##if user id isn't in the database, add them and create a blank entry
+                ##select user id
+                ##get the value for the worm from the row
+                ##add one to worm number
+                ##update worm number in user row
+                
                 await ctx.reply('you get one knowledge wormie! :worm:')
+                #await ctx.reply(f'you get one knowledge wormie! now you have {worm_count} worms :worm:')
                 client.in_session = False
-                ####GIVE USER WHO ANSWERED THE QUESTION CORRECTLY A WORM
+                
             elif my_answer == "quit":
                 await ctx.reply('better luck next time \🐟')
                 client.in_session = False
             else:
                 await ctx.reply('quit or try again \✨')
+
+@client.command()
+async def stats(ctx):
+    ##get user id
+    ##select row from table with user id
+    ##create embeds
+
+    ##if args fishies
+        ##get fish array
+        ##get fish counts
+        ##for each in range len(fish_array)
+            ##add field for fish name + fish counts
+    ##no args
+        ##get total fish
+        ##get total wormies
+        ##add fields
+    pass
+
+# cur.execute("CREATE TABLE Fishing (id SERIAL PRIMARY KEY , user_id integer, worm_count integer, owned_fish text[], fish_counts integer[]);")
