@@ -3,14 +3,13 @@ from database import *
 from manage_timezones import *
 import asyncio
 
-
 @client.command()
 @commands.has_role("botDev")
 async def announce(ctx, *args):
     text = ""
     if not args:
         return
-    else:  # put the whole thing into a string
+    else:  # put the whole thing into a string.
         for arg in args:
             text += arg + " "
 
