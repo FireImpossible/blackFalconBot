@@ -53,7 +53,7 @@ async def gm_message():
                       'get out of beddies if youre not deddies', 'time for yall eggies to get cracking',
                       'wake up late and youre falcon bait', 'rise and shine or they will dine',
                       'if youre not awake youll be baked', 'sleep is canceled so you dont get scrambled', 
-                     'its about time you rose, or youll be the chicken in my moes']
+                     'its about time you rose, or youll be the meat in my moes']
 
     right_now = datetime.datetime.now()  # - datetime.timedelta(hours=time_zone) remove this to implement autotimezone
     hour = right_now.hour
