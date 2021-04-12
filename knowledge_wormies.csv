@@ -1,6 +1,6 @@
 Question,Answer,OS
 How do you enable a firewall in the Ubuntu terminal?,sudo ufw enable,Ubuntu
-Where do you change PermitRootLogin?,c/ssh/sshd_config,Ubuntu
+Where do you change PermitRootLogin?,etc/ssh/sshd_config,Ubuntu
 To disable the root user set PermitRootLogin to [yes/no],no,Ubuntu
 Where do you disable the guest user?,/etc/lightdm/lightdm.conf,Ubuntu
 What line disables the guest user?,allow-guest=false,Ubuntu
