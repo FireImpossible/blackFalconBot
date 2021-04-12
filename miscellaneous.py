@@ -2,6 +2,8 @@ from bot import *
 import random
 from fish import *
 import csv
+from database import *
+
 
 magic_ball_responses = ["As I see it, yes.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.",
              "Don’t count on it.", "It is certain.", "It is decidedly so.", "Most likely.", "My reply is no.", "My sources say no.",
@@ -34,6 +36,7 @@ async def yeehaw(ctx):
 async def gofish(ctx):
 
     #### CHECK IF USER HAS A WORM
+    
     ##get id of user that sent message
     ##select the row from the database
     ##get worm count
@@ -136,14 +139,36 @@ async def wormie(ctx, *args):
                 # worm_count = user_data['worms']
 
                 # print(ctx.author.id)
-                ##if user id isn't in the database, add them and create a blank entry
+
                 ##select user id
-                ##get the value for the worm from the row
-                ##add one to worm number
-                ##update worm number in user row
+                your_worms = 1
+                person_id = str(ctx.author.id)
+                s = []
                 
-                await ctx.reply('you get one knowledge wormie! :worm:')
+                try:
+                    cur.execute("SELECT * FROM GoFishing WHERE user_id = %s", (str(person_id),))
+                    s = cur.fetchall()
+                except:
+                    pass
+                cur.execute("ROLLBACK")
+                if len(s) > 0:
+                    ##get the value for the worm from the row
+                    the_person = s[0]
+                    wormie_num = the_person[2]
+                    ##add one to worm number
+                    wormie_num += 1
+                    your_worms = wormie_num
+                    ##update worm number in user row
+                    cur.execute("UPDATE GoFishing SET worm_count = %s WHERE user_id = %s", (wormie_num, person_id))
+
+                else:
+
+                    ##if user id isn't in the database, add them and create a blank entry
+                    cur.execute("INSERT INTO GoFishing (user_id, worm_count, owned_fish, fish_counts) VALUES(%s, %s, %s, %s)", (person_id, 1, [], []))
+                
+                await ctx.reply(f'you get one knowledge wormie! :worm: now you have {your_worms} worms')
                 #await ctx.reply(f'you get one knowledge wormie! now you have {worm_count} worms :worm:')
+                conn.commit()
                 client.in_session = False
                 
             elif my_answer == "quit":
@@ -169,4 +194,3 @@ async def stats(ctx):
         ##add fields
     pass
 
-# cur.execute("CREATE TABLE Fishing (id SERIAL PRIMARY KEY , user_id integer, worm_count integer, owned_fish text[], fish_counts integer[]);")
