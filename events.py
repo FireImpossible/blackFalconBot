@@ -59,25 +59,18 @@ async def gm_message():
     second = right_now.second
     minute = right_now.minute
     day = right_now.day
-    month = right_now.day
+    month = right_now.month
     time_dif = 0
 
     if hour == message_hour and minute == message_minute and second == 0:
         time_dif = 0
-        return False
     elif hour <= message_hour:
-        time_dif = (convertDateTime(
-            datetime.datetime(2021, month, day, message_hour, message_minute, 0)) - datetime.datetime(2021, month, day,
-                                                                                                      hour, minute,
-                                                                                                      second)).total_seconds()
+        time_dif = (convertDateTime(datetime.datetime(2021, month, day, message_hour, message_minute, 0)) - datetime.datetime(2021, month, day, hour, minute, second)).total_seconds()
         ##schedule for those secs
     else:
         ##how long has passed since 8 am
-        time_dif = (datetime.datetime(2021, month, day, hour, minute, second) - datetime.datetime(2021, month, day,
-                                                                                                  message_hour,
-                                                                                                  message_minute,
-                                                                                                  0)).total_seconds()
-        time_dif = 86400 - time_dif
+        time_dif = (convertDateTime(datetime.datetime(2021, month, day, message_hour, message_minute, 0)) - datetime.datetime(2021, month, day, hour, minute, second)).total_seconds()
+        time_dif = 86400 + time_dif
 
     await asyncio.sleep(time_dif)
 
