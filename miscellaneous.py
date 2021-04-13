@@ -10,14 +10,6 @@ magic_ball_responses = ["As I see it, yes.", "Ask again later.", "Better not tel
              "Outlook not so good.", "Outlook good.", "Reply hazy, try again.", "Signs point to yes.", "Very doubtful.", "Without a doubt.",
              "Yes.", "Yes – definitely.", "You may rely on it."]
 
-
-fishing = {
-    'mollyyan': {
-        'fish': ['Crappie', 'Weakfish'],
-        'worms': 500
-    }
-}
-
 @client.command(name="8ball")
 async def _8ball(ctx):
     await ctx.reply(random.choice(magic_ball_responses))
@@ -120,7 +112,8 @@ async def gofish(ctx):
                 url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
             
             await ctx.reply(embed=fish_embed)
-                
+    else:
+      await ctx.reply('you have no worms...')
     
 
     #### DELETE ONE WORM FROM THE USER'S DATA BASE
