@@ -33,28 +33,95 @@ async def yeehaw(ctx):
     await ctx.reply("cowbois \🤠")
 
 @client.command()
+async def merch(ctx):
+    person_id = str(ctx.author.id)
+    s = []
+    try:
+        cur.execute("SELECT * FROM GoFishing WHERE user_id = %s", (str(person_id),))
+        s = cur.fetchall()
+    except:
+        await ctx.reply('no data found')
+        pass
+    
+    if len(s) > 0:
+        the_person = s[0]
+        wormie_num = the_person[2]
+        fishie_array = the_person[3]
+        fishie_counts = the_person[4]
+
+        fish_display = ''
+
+        for ind in range(0, len(fishie_array)):
+            fish_display += f'{fishie_array[ind]} - {fishie_counts[ind]} \n'
+
+        stats_embed = discord.Embed(
+                title=f"your fishing stats"
+            )
+        stats_embed.add_field(name="worm count", value=wormie_num, inline=False)
+        stats_embed.add_field(name="fish counts", value=fish_display, inline=False)
+        stats_embed.set_thumbnail(url="https://i1.sndcdn.com/artworks-000217345120-79yql0-t500x500.jpg")
+
+        await ctx.reply(embed=stats_embed)
+
+@client.command()
 async def gofish(ctx):
 
     #### CHECK IF USER HAS A WORM
+    person_id = str(ctx.author.id)
+    s = []
+    try:
+        cur.execute("SELECT * FROM GoFishing WHERE user_id = %s", (str(person_id),))
+        s = cur.fetchall()
+    except:
+        await ctx.reply('you have no worms...')
+        pass
     
-    ##get id of user that sent message
-    ##select the row from the database
-    ##get worm count
-    ##if worm count > 0, run this
+    cur.execute("ROLLBACK")
+    if len(s) > 0:
+        the_person = s[0]
+        #print(the_person)
+        wormie_num = the_person[2]
+        if wormie_num == 0:
+            await ctx.reply('you have no worms...')
+        else:
+            wormie_num -= 1
+            your_worms = wormie_num
+            ##update worm number in user row
+            cur.execute("UPDATE GoFishing SET worm_count = %s WHERE user_id = %s", (wormie_num, person_id))
+           
+            fishie_array = the_person[3]
+            fishie_counts = the_person[4]
 
-    rand_num = random.randint(0, (len(fish_names) - 1))
-    rand_fish = fish_names[rand_num]
-    rand_pic = fish_img[rand_num]
-    fish_embed = discord.Embed(
-        title=f"You caught a {rand_fish} \✨"
-    )
-    if rand_fish == "Crappie" or rand_fish == "Weakfish":
-      fish_embed.add_field(name="please be kind", value="all fish can become a catch with your love and support \🥰", inline=False)
-    fish_link = "[all about the " + rand_fish + "](https://fishingbooker.com/fish/" + rand_pic + ")"
-    fish_embed.add_field(name="learn more!", value=fish_link, inline=False)
-    fish_embed.set_image(
-        url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
-    await ctx.reply(embed=fish_embed)
+            rand_num = random.randint(0, (len(fish_names) - 1))
+            rand_fish = fish_names[rand_num]
+            rand_pic = fish_img[rand_num]
+            
+            if rand_fish in fishie_array:
+                ind = fishie_array.index(rand_fish)
+                now_fish = fishie_counts[ind] + 1
+                fishie_counts[ind] = now_fish
+            else:
+                fishie_array.append(rand_fish)
+                fishie_counts.append(1)
+            
+            cur.execute("UPDATE GoFishing SET owned_fish = %s WHERE user_id = %s", (fishie_array, person_id))
+            cur.execute("UPDATE GoFishing SET fish_counts = %s WHERE user_id = %s", (fishie_counts, person_id))
+            
+            conn.commit()
+
+            fish_embed = discord.Embed(
+                title=f"You caught a {rand_fish} \✨"
+            )
+            if rand_fish == "Crappie" or rand_fish == "Weakfish":
+                fish_embed.add_field(name="please be kind", value="all fish can become a catch with your love and support \🥰", inline=False)
+            fish_link = "[all about the " + rand_fish + "](https://fishingbooker.com/fish/" + rand_pic + ")"
+            fish_embed.add_field(name="learn more!", value=fish_link, inline=False)
+            fish_embed.set_image(
+                url=f"https://static.fishingbooker.com/public/images/fish/275x160/{rand_pic}.png")
+            
+            await ctx.reply(embed=fish_embed)
+                
+    
 
     #### DELETE ONE WORM FROM THE USER'S DATA BASE
     ##worm count - 1
@@ -177,20 +244,6 @@ async def wormie(ctx, *args):
             else:
                 await ctx.reply('quit or try again \✨')
 
-@client.command()
-async def stats(ctx):
-    ##get user id
-    ##select row from table with user id
-    ##create embeds
 
-    ##if args fishies
-        ##get fish array
-        ##get fish counts
-        ##for each in range len(fish_array)
-            ##add field for fish name + fish counts
-    ##no args
-        ##get total fish
-        ##get total wormies
-        ##add fields
-    pass
-
+# cur.execute("CREATE TABLE GoFishing (id SERIAL PRIMARY KEY , user_id text, worm_count integer, owned_fish text[], fish_counts integer[]);")
+# conn.commit()
