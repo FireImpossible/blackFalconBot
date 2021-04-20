@@ -53,7 +53,12 @@ async def gm_message():
                       'get out of beddies if youre not deddies', 'time for yall eggies to get cracking',
                       'wake up late and youre falcon bait', 'rise and shine or they will dine',
                       'if youre not awake youll be baked', 'sleep is canceled so you dont get scrambled', 
-                     'its about time you rose, or youll be the meat in my moes']
+                     'its about time you rose, or youll be the meat in my moes', 'throw off your blankie or youll lose your rankie',
+                     'stop being sleepy or youll start being weepy', 'get on your feety, you dont want to be deletey', 
+                      'dont stop slumbering and theyll come lumbering', 'stops catching zzzs or youll be catching bees',
+                     'time to open your eyes and not get baked in pies', 'say good morning or youll be mourning',
+                     'get yourself to brekkie or you theyre going to wrekkie', 'dont want to be cakey cakey? well youd better wakey wakey',
+                     'whats good yolksters! time to be wokesters!', 'yall better be wokelings or youll be brokelings']
 
     right_now = datetime.datetime.now()  # - datetime.timedelta(hours=time_zone) remove this to implement autotimezone
     hour = right_now.hour
