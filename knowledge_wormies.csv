@@ -11,3 +11,12 @@ Enable switchport security,switchport port-security,PT
 Allow a maximum of 2 secure MAC addresses,switchport port-security maximum 2,PT
 Allow a maximum of 2 secure MAC addresses,switchport port-security maximum 2,PT
 How do access local user and group management using Run?,lusrmgr,Windows
+How do you switch to privileged exec mode?,enable,PT
+How do you switch to global exec mode?,configure terminal,PT
+What character will display all related CLI commands?,?,PT
+How do you save your configuration?,copy running-config startup-config,PT
+Which line lets you access Telnet and SSH?,vty,PT
+How do you enter line configuration mode?,line console #,PT
+Set an encrypted password of [eggie],enable secret eggie,PT
+Set a banner of [crack the router and yolk be sorry],banner motd ^crack the router and yolk be sorry^,PT
+Enter the command to enter interface (g0/1) configuration mode,interface g0/1,PT
