@@ -58,7 +58,8 @@ async def gm_message():
                       'dont stop slumbering and theyll come lumbering', 'stops catching zzzs or youll be catching bees',
                      'time to open your eyes and not get baked in pies', 'say good morning or youll be mourning',
                      'get yourself to brekkie or you theyre going to wrekkie', 'dont want to be cakey cakey? well youd better wakey wakey',
-                     'whats good yolksters! time to be wokesters!', 'yall better be wokelings or youll be brokelings']
+                     'whats good yolksters! time to be wokesters!', 'yall better be wokelings or youll be brokelings',
+                     'open the blinds to keep your mind']
 
     right_now = datetime.datetime.now()  # - datetime.timedelta(hours=time_zone) remove this to implement autotimezone
     hour = right_now.hour
@@ -81,7 +82,7 @@ async def gm_message():
     await asyncio.sleep(time_dif)
 
     ##randomize a method
-    message = wakey_messages[random.randint(0, (len(wakey_messages) - 1))]
+    message = random.choice(wakey_messages)
 
     for guild in client.guilds:
         text_channel_list = []
