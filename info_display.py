@@ -98,12 +98,23 @@ async def cisco(ctx, *args):
 
 @client.command(aliases=['scores'])
 async def score(ctx, *args):
-    teamId = str(args[0]) #"14-0792"
+    value = args[0]
+    match str(args[0]):
+        case 'white':
+            value = "14-0792"
+        case 'red':
+            value = "14-0791"
+        case 'purple':
+            value = "14-0790"
+        case 'black':
+            value = "14-0789"
+    
+    teamId = value #"14-0792"
     url = "http://scoreboard.uscyberpatriot.org/team.php?team=" + teamId
     page = urlopen(url)
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
     tablebody = soup.find_all("table")
     tableElement = tablebody[0].find_all("td")
-    score = "team score:", tableElement[-1].getText()
+    score = "Total Score for Team " + teamId + ": " + tableElement[-1].getText()
     await ctx.send(score)
