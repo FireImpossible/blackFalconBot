@@ -95,8 +95,10 @@ async def cisco(ctx, *args):
         cisco_embed.add_field(name=key, value=mod_dict[key], inline=False)
 
     await ctx.send(embed=cisco_embed)
+
+@client.command(aliases=['scores'])
 async def score(ctx, *args):
-    teamId = args[0] #"14-0792"
+    teamId = str(args[0]) #"14-0792"
     url = "http://scoreboard.uscyberpatriot.org/team.php?team=" + teamId
     page = urlopen(url)
     html = page.read().decode("utf-8")
