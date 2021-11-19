@@ -99,15 +99,15 @@ async def cisco(ctx, *args):
 @client.command(aliases=['scores'])
 async def score(ctx, *args):
     value = str(args[0])
-    match value:
-        case 'white':
-            value = "14-0792"
-        case 'red':
-            value = "14-0791"
-        case 'purple':
-            value = "14-0790"
-        case 'black':
-            value = "14-0789"
+#     match value:
+#         case 'white':
+#             value = "14-0792"
+#         case 'red':
+#             value = "14-0791"
+#         case 'purple':
+#             value = "14-0790"
+#         case 'black':
+#             value = "14-0789"
     
     teamId = value #"14-0792"
     url = "http://scoreboard.uscyberpatriot.org/team.php?team=" + teamId
