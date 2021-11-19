@@ -98,8 +98,8 @@ async def cisco(ctx, *args):
 
 @client.command(aliases=['scores'])
 async def score(ctx, *args):
-    value = args[0]
-    match str(args[0]):
+    value = str(args[0])
+    match value:
         case 'white':
             value = "14-0792"
         case 'red':
