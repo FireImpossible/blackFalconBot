@@ -109,7 +109,7 @@ async def score(ctx, *args):
         value = "14-0789"
     teamId = value #"14-0792"
     teamResult = getScore(teamId)
-    scores = "Total Score for Team " + teamResult["id"] + ": " + str(teamResult["total"])
+    #scores = "Total Score for Team " + teamResult["id"] + ": " + str(teamResult["total"])
     score_embed = discord.Embed(
         title=f"Score"
     )
