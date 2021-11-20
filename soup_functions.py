@@ -41,8 +41,19 @@ def getScore(ID):
     tableRows = tablebody[0].find_all("tr")
     headers = tableRows[0].find_all("td")
     correVals = tableRows[1].find_all("td")
+    imagetable = tablebody[1]
+    images = imagetable.find_all("tr")
     scoreDict = {}
     for x in range(len(headers)):
         scoreDict[headers[x].getText()] = correVals[x].getText()
+    def getT(vari):
+        return str(vari.getText().lower())
+    imagesScoreIndex = images[0].find_all("td")
+    imagesScore = map(getT, imagesScoreIndex)
+    indexv = list(imagesScore).index("score")
+    for x in range(len(images) - 1):
+        imageData = images[x + 1].find_all("td")
+        scoreDict[imageData[0].getText()] = imageData[indexv].getText()
+        print(imageData[-1].getText())
     return scoreDict
     
