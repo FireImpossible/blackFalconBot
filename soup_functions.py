@@ -39,6 +39,6 @@ def getScore(ID):
     tablebody = soup.find_all("table")
     tableElement = tablebody[0].find_all("td")
     scoreElem.append(ID)
-    scoreElem.append(int(tableElement[-1].getText()))
+    scoreElem.append(tableElement[-1].getText())
     return scoreElem
     
