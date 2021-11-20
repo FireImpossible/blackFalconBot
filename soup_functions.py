@@ -33,7 +33,6 @@ def getEvents(Events):
                 eventObj.append(dateStrong[1])
     return eventObj
 def getScore(ID):
-#    scoreElem = []
     url = "http://scoreboard.uscyberpatriot.org/team.php?team=" + ID
     page = urlopen(url)
     html = page.read().decode("utf-8")
@@ -45,7 +44,5 @@ def getScore(ID):
     scoreDict = {}
     for x in range(len(headers)):
         scoreDict[headers[x].getText()] = correVals[x].getText()
-#     scoreElem.append(ID)
-#     scoreElem.append(tableElement[-1].getText())
     return scoreDict
     
