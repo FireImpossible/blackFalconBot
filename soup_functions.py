@@ -1,3 +1,5 @@
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
 # for the soup
 def fixText(text):
     if text.find("(") != -1:
