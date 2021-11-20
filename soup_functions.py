@@ -33,14 +33,15 @@ def getEvents(Events):
                 eventObj.append(dateStrong[1])
     return eventObj
 def getScore(ID):
-    scoreElem = []
+#    scoreElem = []
     url = "http://scoreboard.uscyberpatriot.org/team.php?team=" + ID
     page = urlopen(url)
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
     tablebody = soup.find_all("table")
     tableElement = tablebody[0].find_all("td")
-    scoreElem.append(ID)
-    scoreElem.append(tableElement[-1].getText())
+    scoreDict = {"id": ID, "total": int(tableElement[-1].getText())}
+#     scoreElem.append(ID)
+#     scoreElem.append(tableElement[-1].getText())
     return scoreElem
     
