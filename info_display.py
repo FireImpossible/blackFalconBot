@@ -110,11 +110,11 @@ async def score(ctx, *args):
     teamId = value #"14-0792"
     teamResult = getScore(teamId)
     #scores = "Total Score for Team " + teamResult["id"] + ": " + str(teamResult["total"])
-    score_embed = discord.Embed(
-        title=f"Score"
-    )
-    score_embed.set_thumbnail(
-        url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
-    for key in teamResult.keys():
-        score_embed.add_field(name=key, value=teamResult[key], inline=False)
-    await ctx.send(embed=score_embed)
+#     score_embed = discord.Embed(
+#         title=f"Score"
+#     )
+#     score_embed.set_thumbnail(
+#         url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
+#     for key in teamResult.keys():
+#         score_embed.add_field(name=key, value=teamResult[key], inline=False)
+    await ctx.send(teamResult)
