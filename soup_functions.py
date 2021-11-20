@@ -39,8 +39,12 @@ def getScore(ID):
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
     tablebody = soup.find_all("table")
-    tableElement = tablebody[0].find_all("td")
-    scoreDict = {"id": ID, "total": int(tableElement[-1].getText())}
+    tableRows = tablebody[0].find_all("tr")
+    headers = tableRows[0].find_all("td")
+    correVals = tableRows[1].find_all("td")
+    scoreDict = {}
+    for x in range(len(headers)):
+        scoreDict[headers[x].getText()] = correVals[x].getText()
 #     scoreElem.append(ID)
 #     scoreElem.append(tableElement[-1].getText())
     return scoreDict
