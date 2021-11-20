@@ -43,5 +43,5 @@ def getScore(ID):
     scoreDict = {"id": ID, "total": int(tableElement[-1].getText())}
 #     scoreElem.append(ID)
 #     scoreElem.append(tableElement[-1].getText())
-    return scoreElem
+    return scoreDict
     
