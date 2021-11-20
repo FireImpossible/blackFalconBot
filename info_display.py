@@ -99,13 +99,13 @@ async def cisco(ctx, *args):
 @client.command(aliases=['scores'])
 async def score(ctx, *args):
     value = str(args[0])
-    if value == "white"
+    if value == "white":
         value = "14-0792"
-    elif value == "red"
+    elif value == "red":
         value = "14-0791"
-    elif value == "purple"
+    elif value == "purple":
         value = "14-0790"
-    elif value == "black"
+    elif value == "black":
         value = "14-0789"
     teamId = value #"14-0792"
     url = "http://scoreboard.uscyberpatriot.org/team.php?team=" + teamId
