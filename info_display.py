@@ -116,4 +116,4 @@ async def score(ctx, *args):
     score_embed.set_thumbnail(url="https://www.kindpng.com/picc/m/136-1363669_afa-cyberpatriot-hd-png-download.png")
     for key in teamResult.keys():
         score_embed.add_field(name=key, value=teamResult[key], inline=False)
-    await ctx.send(score_embed)
+    await ctx.send(embed=score_embed)
