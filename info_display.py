@@ -108,11 +108,6 @@ async def score(ctx, *args):
     elif value == "black":
         value = "14-0789"
     teamId = value #"14-0792"
-    url = "http://scoreboard.uscyberpatriot.org/team.php?team=" + teamId
-    page = urlopen(url)
-    html = page.read().decode("utf-8")
-    soup = BeautifulSoup(html, "html.parser")
-    tablebody = soup.find_all("table")
-    tableElement = tablebody[0].find_all("td")
-    score = "Total Score for Team " + teamId + ": " + tableElement[-1].getText()
+    teamResult = getScore(teamId)
+    score = "Total Score for Team " + teamResult[0] + ": " + str(teamResult[1])
     await ctx.send(score)
