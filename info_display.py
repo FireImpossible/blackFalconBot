@@ -109,5 +109,5 @@ async def score(ctx, *args):
         value = "14-0789"
     teamId = value #"14-0792"
     teamResult = getScore(teamId)
-    #score = "Total Score for Team " + teamResult[0] + ": " + str(teamResult[1])
+    score = "Total Score for Team " + teamResult[0] + ": " + str(teamResult[1])
     await ctx.send(teamResult)
